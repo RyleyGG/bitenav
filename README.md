@@ -3,6 +3,7 @@ Project codename BiteNav - Macro tracker and recipe tool
 
 ### Requirements
 * Python 3.10 or newer (TODO: implement python virtual environment)
+* Docker Desktop
 * All library requirements are present in included in the *requirements.txt* file. Instructions on how to download these included in the Setup section.
 
 ### Setup
@@ -12,17 +13,24 @@ Project codename BiteNav - Macro tracker and recipe tool
 2. Pull down the most recent version of this repository to a local location.
 3. Install library requirements found in *requirements.txt* by running:
     ```
+    cd [repository]/backend
     pip install -r requirements.txt
     ```
-4. Run the following commands to prep and activate the API and database docker containers:
+4. Generate required .env file by running (NOTE: if on Windows, these commands must be run in Git Bash):
+    ```
+    cd [repository]
+    ./setup.sh
+    ```
+5. Run the following commands to prep and activate the API and database docker containers:
     ```
     cd [repository]/backend
     docker compose build
     docker compose up
     ```
-5. Compile and run the frontend. The simplest command to achieve this is:
+6. Compile and run the frontend. The simplest command to achieve this is:
     ```
     cd [repository]/frontend
+    npm install
     npm run start
     ```
 
