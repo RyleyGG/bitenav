@@ -1,4 +1,7 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import APIRouter
+from db import db
+from models.db_models import SomeTable
+
 
 router = APIRouter()
 
@@ -7,5 +10,7 @@ async def someFuncName():
     return {'message': 'Test Func'}
 
 @router.get('/someotherendpoint')
-async def otherFuncName():
-    return {'message': 'Another func'}
+async def otherFuncName(db: db):
+    newEntry = SomeTable(attrOne='someVal')
+    db.add(newEntry)
+    db.commit()
