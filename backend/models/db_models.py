@@ -1,6 +1,6 @@
 from sqlalchemy import Integer, String, Column
 
-from services.ConfigService import Base
+from services.config_service import Base
 
 
 class SomeTable(Base):

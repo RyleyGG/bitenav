@@ -1,11 +1,10 @@
 from fastapi import Depends
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 from typing import Annotated
 from sqlalchemy.orm import Session
 
-from services.ConfigService import config, Base, engine, SessionLocal
+from services.config_service import Base, engine, SessionLocal
+
+# NOTE: Keep all table imports here at all times. Table schemas must be imported here to be properly initialized in the database.
 from models.db_models import SomeTable
 
 Base.metadata.create_all(bind=engine)

@@ -7,7 +7,7 @@ from typing import Annotated
 from sqlalchemy.orm import Session
 
 from routers import test_router
-from services.ConfigService import config
+from services.config_service import config
 
 app = FastAPI()
 app.include_router(test_router.router, prefix='/test')
