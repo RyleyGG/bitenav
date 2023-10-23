@@ -1,9 +1,13 @@
 from sqlalchemy import Integer, String, Column
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 from services.config_service import Base
 
 
-class SomeTable(Base):
-    __tablename__ = 'SomeTable'
-    id = Column(Integer, primary_key=True, index=True)
-    attrOne = Column(String, index=True)
+class User(Base):
+    __tablename__ = 'User'
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    first_name = Column(String)
+    last_name = Column(String)
+    email_address = Column(String)

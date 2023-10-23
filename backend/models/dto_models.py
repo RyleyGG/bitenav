@@ -1,8 +1,6 @@
 from pydantic import BaseModel
-import uuid
 
-class User(BaseModel):
-    id: uuid.UUID
+class SignUpInfo(BaseModel):
     email_address: str
     first_name: str
     last_name: str
