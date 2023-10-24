@@ -8,7 +8,10 @@ cwd = Path(__file__).parent.parent.parent
 
 class Config(BaseSettings):
     postgres_password: str = ''
-    model_config = SettingsConfigDict(env_file=cwd / '.env')
+    auth_secret: str = ''
+    auth_algo: str = 'HS256'
+    jwt_token_exp_minutes: int = 30
+    model_config = SettingsConfigDict(env_file=cwd / '.env', from_attributes=True)
 config: Config = Config()
 
 dbUrl = f'postgresql://postgres:{config.postgres_password}@db:5432/postgres'

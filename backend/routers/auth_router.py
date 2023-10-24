@@ -1,22 +1,34 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from db import getDb
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from models.db_models import User as UserDb
 from models.pydantic_models import User as UserPyd
-from models.dto_models import SignUpInfo
+from models.dto_models import SignUpInfo, SuccessfulUserAuth
 
+from services import auth_service
 
 router = APIRouter()
 
 @router.post('/sign_in')
-async def attemptSignin(db: Session = Depends(getDb)):
-    pass
+async def attemptSignin(formData: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(getDb)):
+    existing_user = db.query(UserDb).filter(UserDb.email_address == formData.email_address).first()
+    
+    if not existing_user or not auth_service.verify_password(formData.password, existing_user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-@router.post('/sign_up', response_model=UserPyd, response_model_by_alias=False)
-async def attemptSignup(incomingObj: SignUpInfo, db: Session = Depends(getDb)):
+    access_token = auth_service.create_access_token(data={"sub": existing_user.email_address})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post('/sign_up', response_model=SuccessfulUserAuth, response_model_by_alias=False)
+async def attemptSignup(signupObj: SignUpInfo, db: Session = Depends(getDb)):
     # Validate incoming data prior to committing to db
-    existing_user = db.query(UserDb).filter(UserDb.emailAddress == incomingObj.email_address).first()
+    existing_user = db.query(UserDb).filter(UserDb.email_address == signupObj.email_address).first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -24,12 +36,16 @@ async def attemptSignup(incomingObj: SignUpInfo, db: Session = Depends(getDb)):
         )
 
     # Commit to db
+    hashedPassword = auth_service.genPasswordHash(signupObj.password)
     newUser = UserDb(
-        emailAddress=incomingObj.email_address,
-        firstName=incomingObj.first_name,
-        lastName=incomingObj.last_name
+        email_address=signupObj.email_address,
+        password=hashedPassword,
+        first_name=signupObj.first_name,
+        last_name=signupObj.last_name
     )
     db.add(newUser)
     db.commit()
+    db.refresh(newUser)
 
-    return UserPyd.from_orm(newUser)
+    access_token = auth_service.createAccessToken(data={"sub": newUser.email_address})
+    return {"access_token": access_token, "token_type": "bearer", "user": UserPyd.model_validate(newUser)}

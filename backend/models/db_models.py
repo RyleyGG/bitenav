@@ -11,3 +11,4 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     email_address = Column(String)
+    password = Column(String)

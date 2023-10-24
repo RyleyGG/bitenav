@@ -21,7 +21,7 @@ const OtherPage = ({ navigation }: { navigation: any }) => {
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Return from Test Router: {testData}</Text>
+        <Text>Return from API: {testData}</Text>
         <Button
             title="Go to HomePage"
             onPress={() => navigation.navigate('Home')}

@@ -29,7 +29,7 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
             />
             <Button title="Sign In" />
 
-            <p>Don't have an account? <a onClick={() => navigation.navigate('Sign-up')} style={globalStyles.inlineLink}>sign up</a> instead</p>
+            <p>Don't have an account? <a onClick={() => navigation.navigate('Sign-up')} style={globalStyles.inlineLink}>Sign up</a> instead</p>
         </View>
     );
 }
