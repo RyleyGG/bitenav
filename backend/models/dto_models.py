@@ -8,6 +8,10 @@ class SignUpInfo(BaseModel):
     last_name: str
     password: str
 
+class SignInInfo(BaseModel):
+    email_address: str
+    password: str
+    
 class SuccessfulUserAuth(BaseModel):
     user: User
     token_type: str

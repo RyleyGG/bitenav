@@ -1,60 +1,55 @@
 import { StyleSheet, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
-
-import { userIsAuthenticated } from './services/AuthService';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import NavigationHeader from './components/NavigationHeader';
 import HomePage from './pages/HomePage'
 import SigninPage from './pages/SigninPage'
 import SignupPage from './pages/SignupPage'
 import OtherPage from './pages/OtherPage'
+import { AuthContext, AuthProvider } from './AuthContext';
+import { useContext, useEffect, useState } from 'react';
 
 const Stack = createNativeStackNavigator();
 
-interface NavigatorOptions {
-    initialRouteName?: string;
-    screenOptions?: NativeStackNavigationOptions;
-}
-
-const getNavigatorOpts = (authToken: boolean) => {
-    const opts: NavigatorOptions = {};
-
-    if (authToken) {
-        opts.initialRouteName = 'Home';
-        opts.screenOptions = {
-            header: NavigationHeader
-        };
-    }
-    else {
-        opts.initialRouteName = 'Sign-in';
-    }
-
-    return opts;
-}
-
-const App = () => {
-    const validAuthToken = userIsAuthenticated();
-    const navOpts = getNavigatorOpts(validAuthToken);
-  return (
-    <NavigationContainer>
-        <Stack.Navigator
-            {...navOpts}
-        >
-            {validAuthToken ? (
-            <>
-                <Stack.Screen name="Home" component={HomePage} />
-                <Stack.Screen name="Other" component={OtherPage} />
-            </>
-            ) : (
-            <>
-                <Stack.Screen name="Sign-in" component={SigninPage} />
-                <Stack.Screen name="Sign-up" component={SignupPage} />
-            </>
-            )}
-        </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-export default App;
+const AuthenticatedApp = () => {
+    return (
+      <Stack.Navigator
+      initialRouteName='Home'
+      screenOptions={{
+          header: NavigationHeader
+      }}>
+        <Stack.Screen name="Home" component={HomePage} />
+        <Stack.Screen name="Other" component={OtherPage} />
+        {/* other authenticated screens */}
+      </Stack.Navigator>
+    );
+  };
+  
+  const UnauthenticatedApp = () => {
+    return (
+      <Stack.Navigator
+      initialRouteName='Sign-in'>
+        <Stack.Screen name="Sign-in" component={SigninPage} />
+        <Stack.Screen name="Sign-up" component={SignupPage} />
+      </Stack.Navigator>
+    );
+  };
+  
+  const AppNavigator = () => {
+    const { isAuthenticated } = useContext(AuthContext);
+  
+    return isAuthenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />;
+  };
+  
+  const App = () => {
+    return (
+      <AuthProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </AuthProvider>
+    );
+  };
+  
+  export default App;

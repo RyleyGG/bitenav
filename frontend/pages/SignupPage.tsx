@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Text,
   TextInput,
@@ -8,14 +8,17 @@ import {
 } from 'react-native';
 import { Button } from '@rneui/base';
 
-import { requestSignup } from '../services/AuthService';
 import { SignUpInfo } from '../models/Auth';
-
 import globalStyles from '../GlobalStyles';
 import NotificationBox from '../components/NotificationBox';
+import { AuthContext } from '../AuthContext';
 
 
 const SignupPage = ({ navigation }: { navigation: any }) => {
+    const authContext = useContext(AuthContext);
+    const { requestSignup } = useContext(AuthContext);
+
+      
     const [email, setEmail] = React.useState('');
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
@@ -51,7 +54,7 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
         }
     }
 
-    const initiateSignup = () => {
+    const initiateSignup = async () => {
         requestSignup({
             'first_name': firstName,
             'last_name': lastName,
@@ -69,7 +72,7 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
             }
             , 3000)
         })
-        .catch((error: any) => { 
+        .catch((error: any) => {
             setNotifText('There was an error creating your account. Please try again.')
             setNotifSuccess(false);
             setDisplayNotif(true);

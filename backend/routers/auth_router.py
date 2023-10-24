@@ -5,25 +5,25 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from models.db_models import User as UserDb
 from models.pydantic_models import User as UserPyd
-from models.dto_models import SignUpInfo, SuccessfulUserAuth
+from models.dto_models import SignUpInfo, SignInInfo, SuccessfulUserAuth
 
 from services import auth_service
 
 router = APIRouter()
 
 @router.post('/sign_in')
-async def attemptSignin(formData: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(getDb)):
-    existing_user = db.query(UserDb).filter(UserDb.email_address == formData.email_address).first()
+async def attemptSignin(signinObj: SignInInfo, db: Session = Depends(getDb)):
+    existing_user = db.query(UserDb).filter(UserDb.email_address == signinObj.email_address).first()
     
-    if not existing_user or not auth_service.verify_password(formData.password, existing_user.hashed_password):
+    if not existing_user or not auth_service.verifyPassword(signinObj.password, existing_user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Bearer"},
+            detail='Incorrect email or password',
+            headers={'WWW-Authenticate': 'Bearer'},
         )
 
-    access_token = auth_service.create_access_token(data={"sub": existing_user.email_address})
-    return {"access_token": access_token, "token_type": "bearer"}
+    access_token = auth_service.createAccessToken(data={'sub': existing_user.email_address})
+    return {'access_token': access_token, 'token_type': 'bearer'}
 
 @router.post('/sign_up', response_model=SuccessfulUserAuth, response_model_by_alias=False)
 async def attemptSignup(signupObj: SignUpInfo, db: Session = Depends(getDb)):
