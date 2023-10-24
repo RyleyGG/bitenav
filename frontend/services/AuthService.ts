@@ -1,5 +1,6 @@
 import { SignUpInfo } from "../models/Auth";
 import * as SecureStore from 'expo-secure-store';
+import { MealFilters } from "../models/Meals";
 
 const url: string = 'http://localhost:8000/auth';
 

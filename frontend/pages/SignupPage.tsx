@@ -9,9 +9,10 @@ import {
 import { Button } from '@rneui/base';
 
 import { requestSignup } from '../services/AuthService';
-import { SignUpInfo } from '../models/auth';
+import { SignUpInfo } from '../models/Auth';
 
 import globalStyles from '../GlobalStyles';
+import NotificationBox from '../components/NotificationBox';
 
 
 const SignupPage = ({ navigation }: { navigation: any }) => {
@@ -21,6 +22,10 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
     const [password, setPassword] = React.useState('');
     const [dataIsValid, setDataIsValid] = React.useState(false);
     const [confirmPassword, setConfirmPassword] = React.useState('');
+
+    const [displayNotif, setDisplayNotif] = React.useState(false);
+    const [notifSuccess, setNotifSuccess] = React.useState(false);
+    const [notifText, setNotifText] = React.useState('');
 
     useEffect(() => {
         checkDataValidity();
@@ -53,9 +58,26 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
             'email_address': email,
             'password': password
         })
-        .then((data: any) => { 
+        .then((data: any) => {
+            setNotifText('Account successfully created. Redirecting to sign-in page in 3 seconds...')
+            setNotifSuccess(true);
+            setDisplayNotif(true);
+
+            setTimeout((
+            ) => {
+                navigation.navigate('Sign-in');
+            }
+            , 3000)
         })
-        .catch((error: any) => { console.log(error) });
+        .catch((error: any) => { 
+            setNotifText('There was an error creating your account. Please try again.')
+            setNotifSuccess(false);
+            setDisplayNotif(true);
+        });
+    }
+
+    const handleCloseNotif = () => {
+        setDisplayNotif(false);
     }
 
     return (
@@ -94,6 +116,14 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
             />
 
             <p>Already have an account? <a onClick={() => navigation.navigate('Sign-in')} style={globalStyles.inlineLink}>Sign in</a> instead</p>
+
+            {displayNotif ? (
+            <NotificationBox
+                isVisible={displayNotif}
+                isSuccess={notifSuccess}
+                content={notifText}
+                onClose={handleCloseNotif}
+            />): (<></>)}
         </View>
     );
 }
