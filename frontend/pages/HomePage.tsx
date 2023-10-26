@@ -9,10 +9,6 @@ const HomePage = ({ navigation }: { navigation: any }) => {
             title="Go to OtherPage"
             onPress={() => navigation.navigate('Other')}
         />
-        <Button
-            title="Go to Search"
-            onPress={() => navigation.navigate('Search')}
-        />
       </View>
     );
 }
