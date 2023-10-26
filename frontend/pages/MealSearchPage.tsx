@@ -65,7 +65,7 @@ const SearchPage = ({ navigation }: { navigation: any }) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '1.5vh' }}>
             <TextInput
                 placeholder="Meal Name"
                 onChangeText={setName}

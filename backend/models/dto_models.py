@@ -22,4 +22,4 @@ class MealSearchFilters(BaseModel):
     name: Optional[str]
 
 class MealSearchResult(BaseModel):
-    name = str
+    name: str

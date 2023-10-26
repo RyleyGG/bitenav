@@ -10,7 +10,7 @@ export const getMeals = async (mealObj: MealSearchFilters) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(mealObj)
         };
-        const response = await fetch(`${url}/meal_search`, requestOptions);
+        const response = await fetch(`${url}/search`, requestOptions);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);

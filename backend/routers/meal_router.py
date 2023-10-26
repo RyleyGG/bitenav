@@ -8,24 +8,29 @@ from typing import List
 
 router = APIRouter()
 
-@router.post('/meal_search', response_model = MealSearchResult, response_model_by_alias = False)
+@router.post('/search', response_model = MealSearchResult, response_model_by_alias = False)
 async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(getDb)):
     
-    NameSearch = ''
+    nameSearch = ''
     if incomingSearches.name:
-        NameSearch += f'query={incomingSearches.name}&'
-    if NameSearch[-1] == '&':
-        NameSearch = NameSearch[0:-2]
-    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey=&f5c554fbdd43461eb5ff8af17aba8941{NameSearch}'
+        nameSearch += f'query={incomingSearches.name}&'
+    if nameSearch[-1] == '&':
+        nameSearch = nameSearch[0:-2]
+    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey=f5c554fbdd43461eb5ff8af17aba8941&{nameSearch}'
 
     results = requests.get(spoonacularURL)
 
     returnMeals = []
 
-    for meal in results['results']:
-        NewMealResult = MealSearchResult()
-        NewMealResult.name = meal['name']
-        returnMeals.append(NewMealResult)
+    try:
+        for meal in results.json()['results']:
+            NewMealResult = MealSearchResult(name=meal['title'])
+            returnMeals.append(NewMealResult)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail='Error grabbing Spoonacular results',
+        )
 
     return returnMeals[0]
 
