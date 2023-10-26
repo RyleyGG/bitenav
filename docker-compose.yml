@@ -1,7 +1,7 @@
 services:
   api:
     build: .
-    command: ["/app/api_start.sh"]
+    command: ["/bin/sh","/app/api_start.sh"]
     volumes:
       - ./backend:/app
     ports:
@@ -9,14 +9,15 @@ services:
     depends_on:
       - db
     environment:
-      postgres_password: ${postgres_password}
+      POSTGRES_PASSWORD: ${postgres_password}
 
   db:
     image: postgres:latest
     ports:
       - "5432:5432"
     environment:
-      postgres_password: ${postgres_password}
+      POSTGRES_PASSWORD: ${postgres_password}
+      POSTGRES_DB: "db"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

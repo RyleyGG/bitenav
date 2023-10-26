@@ -1,4 +1,4 @@
-const url: string = 'http://localhost:8000/test/';
+const url: string = 'http://10.0.0.237:8000/test/';
 
 export const getTest = async () => {
     try {
