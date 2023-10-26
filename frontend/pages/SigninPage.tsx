@@ -44,7 +44,7 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '1.5vh' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <TextInput
                 placeholder="Email"
                 onChangeText={setEmail}
@@ -58,7 +58,7 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
             />
             <Button title="Sign In" onPress={initiateSignin}/>
 
-            <p>Don't have an account? <a onClick={() => navigation.navigate('Sign-up')} style={globalStyles.inlineLink}>Sign up</a> instead</p>
+            //<p>Don't have an account? <a onClick={() => navigation.navigate('Sign-up')} style={globalStyles.inlineLink}>Sign up</a> instead</p>
 
             {displayNotif ? (
             <NotificationBox

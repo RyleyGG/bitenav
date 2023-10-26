@@ -84,7 +84,7 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '1.5vh' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <TextInput
                 placeholder="First Name"
                 onChangeText={setFirstName}
