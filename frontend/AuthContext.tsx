@@ -1,6 +1,7 @@
 import React, { ReactNode, createContext, useEffect, useState } from 'react';
 import { SignInInfo, SignUpInfo } from './models/Auth';
 
+import { API_URL } from '@env'
 export const AuthContext = createContext({} as AuthContextType);
 
 interface AuthContextType {
@@ -16,7 +17,7 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false); // Set initial state based on previous sessions if you want
-    const [url, setUrl] = useState('http://localhost:8000/auth')
+    const [url, setUrl] = useState(`${API_URL}/auth`)
 
     useEffect(() => {
         userIsAuthenticated();

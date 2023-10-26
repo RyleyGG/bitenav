@@ -18,7 +18,6 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
     const authContext = useContext(AuthContext);
     const { requestSignup } = useContext(AuthContext);
 
-      
     const [email, setEmail] = React.useState('');
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');

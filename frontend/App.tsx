@@ -21,7 +21,6 @@ const AuthenticatedApp = () => {
       }}>
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Other" component={OtherPage} />
-        {/* other authenticated screens */}
       </Stack.Navigator>
     );
   };
