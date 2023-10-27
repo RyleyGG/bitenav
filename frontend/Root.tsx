@@ -46,7 +46,7 @@ const AuthenticatedApp = () => {
 
     return (
         <NavigationContainer
-            // onStateChange={refreshTokenStatus}
+            onStateChange={refreshTokenStatus}
         >
           <AppNavigator />
         </NavigationContainer>

@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     const refreshTokenStatus = () => {
-        const token = localStorage.getItem('access_token');
+        const token = getToken('access_token');
         
         if (!token) {
             setIsAuthenticated(false);

@@ -38,8 +38,7 @@ class HttpClient {
     private _initializeRequestInterceptor = () => {
         this.instance.interceptors.request.use(
             (config) => {
-                // const token = this.getAccessToken();
-                const token = 'wart';
+                const token = this.getTokensCallback?.('access_token');
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
