@@ -15,7 +15,6 @@ import { AuthContext } from '../AuthContext';
 
 
 const SignupPage = ({ navigation }: { navigation: any }) => {
-    const authContext = useContext(AuthContext);
     const { requestSignup } = useContext(AuthContext);
 
     const [email, setEmail] = React.useState('');

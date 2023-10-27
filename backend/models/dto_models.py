@@ -13,6 +13,9 @@ class SignInInfo(BaseModel):
     password: str
     
 class SuccessfulUserAuth(BaseModel):
-    user: User
     token_type: str
     access_token: str
+    refresh_token: str
+
+class RefreshToken(BaseModel):
+    refresh_token: str

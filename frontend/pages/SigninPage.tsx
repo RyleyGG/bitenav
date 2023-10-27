@@ -5,7 +5,8 @@ import React, { useContext, useEffect } from 'react';import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { Button } from '@rneui/base';
+import { Button, CheckBox } from '@rneui/base';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import globalStyles from '../GlobalStyles'; // adjust the path as necessary
 import NotificationBox from '../components/NotificationBox';
@@ -16,6 +17,7 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [keepLoggedIn, setKeepLoggedIn] = React.useState(false);
 
     const [displayNotif, setDisplayNotif] = React.useState(false);
     const [notifSuccess, setNotifSuccess] = React.useState(false);
@@ -24,8 +26,8 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
     const initiateSignin = async () => {
         requestSignin({
             email_address: email,
-            password: password
-        })
+            password: password,
+        }, keepLoggedIn)
         .then(() => {
             setNotifText('Successfully logged in. Redirecting to home...')
             setNotifSuccess(true);
@@ -56,8 +58,15 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
                 secureTextEntry={true}
                 style={globalStyles.basicInputField}
             />
+            <CheckBox
+                checked={keepLoggedIn}
+                uncheckedIcon={<Ionicons name="md-checkmark-circle-outline" size={26} color="black" />}
+                checkedIcon={<Ionicons name="md-checkmark-circle" size={26} color="green" />}
+                title='Keep me logged in'
+                containerStyle={globalStyles.basicInputField}
+                onPress={() => setKeepLoggedIn(!keepLoggedIn)}
+            />
             <Button title="Sign In" onPress={initiateSignin}/>
-
             <p>Don't have an account? <a onClick={() => navigation.navigate('Sign-up')} style={globalStyles.inlineLink}>Sign up</a> instead</p>
 
             {displayNotif ? (
