@@ -53,8 +53,9 @@ async def revalidateAccessToken(refresh_token: RefreshToken, db: Session = Depen
     try:
         user = await auth_service.validateToken(token=refresh_token.refresh_token, db=db)
     except Exception as e:
+        # 401 would be more technically correct, but 400 avoids the frontend error interceptor from picking it up
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail='Failed to refresh authentication',
             headers={'WWW-Authenticate': 'Bearer'},
         )

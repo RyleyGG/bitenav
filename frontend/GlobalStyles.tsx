@@ -10,7 +10,6 @@ const globalStyles = StyleSheet.create({
     },
     inlineLink: {
         color: 'blue',
-        cursor: 'pointer'
     },
 });
 

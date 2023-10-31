@@ -2,10 +2,10 @@ import { View, Text } from 'react-native';
 import { Button } from '@rneui/base';
 import React, { useState, useEffect } from 'react';
 
-import { getTest, getTestTwo } from '../services/TestRouterService'
+import { getTest } from '../services/TestRouterService'
 
 const OtherPage = ({ navigation }: { navigation: any }) => {
-    const [testData, setTestData] = useState(null);
+    const [testData, setTestData] = useState('');
 
     useEffect(() => {
         getTestData();

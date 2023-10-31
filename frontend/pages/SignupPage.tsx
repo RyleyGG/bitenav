@@ -3,8 +3,7 @@ import {
   Text,
   TextInput,
   View,
-  ActivityIndicator,
-  StyleSheet,
+  Dimensions
 } from 'react-native';
 import { Button } from '@rneui/base';
 
@@ -13,6 +12,8 @@ import globalStyles from '../GlobalStyles';
 import NotificationBox from '../components/NotificationBox';
 import { AuthContext } from '../AuthContext';
 
+
+const { width, height } = Dimensions.get('window');
 
 const SignupPage = ({ navigation }: { navigation: any }) => {
     const { requestSignup } = useContext(AuthContext);
@@ -82,7 +83,7 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '1.5vh' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 0.015 * height }}>
             <TextInput
                 placeholder="First Name"
                 onChangeText={setFirstName}
@@ -116,7 +117,9 @@ const SignupPage = ({ navigation }: { navigation: any }) => {
                 disabled={!dataIsValid}
             />
 
-            <p>Already have an account? <a onClick={() => navigation.navigate('Sign-in')} style={globalStyles.inlineLink}>Sign in</a> instead</p>
+            <Text>
+                Already have an account? <Text onPress={() => navigation.navigate('Sign-in')} style={globalStyles.inlineLink}>Sign in</Text> instead
+            </Text>
 
             {displayNotif ? (
             <NotificationBox

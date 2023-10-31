@@ -2,15 +2,17 @@ import React, { useContext, useEffect } from 'react';import {
   Text,
   TextInput,
   View,
-  ActivityIndicator,
-  StyleSheet,
+  Dimensions
 } from 'react-native';
 import { Button, CheckBox } from '@rneui/base';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import globalStyles from '../GlobalStyles'; // adjust the path as necessary
+import globalStyles from '../GlobalStyles';
 import NotificationBox from '../components/NotificationBox';
 import { AuthContext } from '../AuthContext';
+
+
+const { width, height } = Dimensions.get('window');
 
 const SigninPage = ({ navigation }: { navigation: any }) => {
     const { requestSignin } = useContext(AuthContext);
@@ -38,7 +40,6 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
             setNotifSuccess(false);
             setDisplayNotif(true);
         })
-        return;
     }
     
     const handleCloseNotif = () => {
@@ -46,7 +47,7 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '1.5vh' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 0.015 * height }}>
             <TextInput
                 placeholder="Email"
                 onChangeText={setEmail}
@@ -67,9 +68,11 @@ const SigninPage = ({ navigation }: { navigation: any }) => {
                 onPress={() => setKeepLoggedIn(!keepLoggedIn)}
             />
             <Button title="Sign In" onPress={initiateSignin}/>
-            <p>Don't have an account? <a onClick={() => navigation.navigate('Sign-up')} style={globalStyles.inlineLink}>Sign up</a> instead</p>
+            <Text>
+                Don't have an account? <Text onPress={() => navigation.navigate('Sign-up')} style={globalStyles.inlineLink}>Sign up</Text> instead
+            </Text>
 
-            {displayNotif ? (
+            {!!displayNotif ? (
             <NotificationBox
                 isVisible={displayNotif}
                 isSuccess={notifSuccess}

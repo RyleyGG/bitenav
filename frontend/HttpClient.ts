@@ -7,8 +7,8 @@ import { SuccessfulUserAuth } from './models/Auth'
 class HttpClient {
     protected readonly instance: AxiosInstance;
     private authErrorCallback?: () => void;
-    private getTokensCallback?: (token_name: string) => string;
-    private setTokensCallback?: (access_token: string, refresh_token: string) => boolean;
+    private getTokensCallback?: (token_name: string) => Promise<string>;
+    private setTokensCallback?: (access_token: string, refresh_token: string) => Promise<boolean>;
     private isRefreshing: boolean = false;
     private failedQueue: {
         resolve: (value: any) => void;
@@ -37,8 +37,11 @@ class HttpClient {
 
     private _initializeRequestInterceptor = () => {
         this.instance.interceptors.request.use(
-            (config) => {
-                const token = this.getTokensCallback?.('access_token');
+            async (config) => {
+                let token = null;
+                if (this.getTokensCallback) {
+                    token = await this.getTokensCallback('access_token');
+                }
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
@@ -54,11 +57,11 @@ class HttpClient {
         this.authErrorCallback = callback;
     }
 
-    public setGetTokensCallback(callback: (token_name: string) => string) {
+    public setGetTokensCallback(callback: (token_name: string) => Promise<string>) {
         this.getTokensCallback = callback;
     }
 
-    public setSetTokenCallback(callback: (access_token: string, refresh_token: string) => boolean) {
+    public setSetTokenCallback(callback: (access_token: string, refresh_token: string) => Promise<boolean>) {
         this.setTokensCallback = callback;
     }
     
@@ -70,7 +73,7 @@ class HttpClient {
             if (!this.getTokensCallback || !this.setTokensCallback) {
                 throw Error;
             }
-            const refreshToken = this.getTokensCallback('refresh_token');
+            const refreshToken = await this.getTokensCallback('refresh_token');
             const requestOptions = {
                 headers: { 'Content-Type': 'application/json' },
             };
@@ -78,8 +81,8 @@ class HttpClient {
                 `${API_URL}/auth/refresh`,
                 {refresh_token: refreshToken},
                 requestOptions);
-    
-            const tokensSet = this.setTokensCallback(refreshTokenResponse.access_token, refreshTokenResponse.refresh_token);
+
+            const tokensSet = await this.setTokensCallback(refreshTokenResponse.access_token, refreshTokenResponse.refresh_token);
     
             if (tokensSet) {
                 for (const queueItem of this.failedQueue) {
@@ -121,7 +124,7 @@ class HttpClient {
             retryOriginalRequest.then((res) => {
             })
             .catch((err) => {
-                this.authErrorCallback?.();
+                this.authErrorCallback!();
             });
 
             
