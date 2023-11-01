@@ -1,7 +1,7 @@
-import { SearchBar } from "@rneui/themed";
+import { SearchBar, Input, CheckBox, Icon } from "@rneui/themed";
 import React, {useState} from 'react';
 import { View, Text } from 'react-native';
-import { Button } from '@rneui/base';
+import { Button  } from '@rneui/base';
 import { sendSearch } from "../services/SearchMealService";
 import DisplayMeal from "./DisplayMeal";
 
@@ -9,7 +9,10 @@ import DisplayMeal from "./DisplayMeal";
 
 const SearchMeal = (props:any) => {
   const [search, setSearch] = useState("");
-  const [data, setData] = useState("")
+  const [data, setData] = useState("");
+  const [check1, setCheck1] = useState(false);
+  const [maxFat, setMaxFat] = useState("");
+
   let searchData:any;
   
   const updateSearch = (search: any) => {
@@ -17,6 +20,7 @@ const SearchMeal = (props:any) => {
   }
 
   const updateData = () => {
+    setSearch(`search: ${search},` + `MaxFat: ${maxFat}`)
     searchData = sendSearch(search);
     ()=>setData(searchData);
     let dataObj = JSON.parse(data)
@@ -35,6 +39,7 @@ const SearchMeal = (props:any) => {
 
   }
 
+
   return (
     <View style={{ width: "75%" }}>
       <SearchBar 
@@ -45,6 +50,26 @@ const SearchMeal = (props:any) => {
        >
 
       </SearchBar>
+      <CheckBox
+        title={<Input
+          placeholder="Enter Max Fat:"
+          value={maxFat}
+          onChangeText={setMaxFat}
+        >
+          </Input>
+          } 
+        checked={check1}
+        checkedIcon={
+          <Icon name="radio-button-checked" type="material" color="blue" />
+        }
+        uncheckedIcon={
+          <Icon name="radio-button-unchecked" type="material" color="green" />
+        }
+        onPress={()=>setCheck1(!check1)}
+
+      >
+      </CheckBox>
+
       <Button onPress={()=> updateData()}>
 
       </Button>

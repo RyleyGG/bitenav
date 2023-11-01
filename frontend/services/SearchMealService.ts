@@ -3,7 +3,7 @@ let url: string = 'http://10.0.0.237:8000/searchmeal/';
 export const sendSearch = async (search:any) => {
     try {
 
-        let searchMessage = `{"search": ${search}}`;
+        let searchMessage = search;
         url += searchMessage;
 
         const response = await fetch(`${url}`);
