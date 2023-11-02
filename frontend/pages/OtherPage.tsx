@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { getTest } from '../services/TestRouterService'
 
 const OtherPage = ({ navigation }: { navigation: any }) => {
-    const [testData, setTestData] = useState(null);
+    const [testData, setTestData] = useState('');
 
     useEffect(() => {
         getTestData();
@@ -14,14 +14,13 @@ const OtherPage = ({ navigation }: { navigation: any }) => {
     const getTestData = () => {
         getTest()
         .then((data: any) => { 
-            console.log(data);
-            setTestData(data); })
-        .catch((error: any) => { setTestData(error) });
+            setTestData(data.message); })
+        .catch((error: any) => { setTestData('uh oh') });
     }
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Return from Test Router: {testData}</Text>
+        <Text>Return from API: {testData}</Text>
         <Button
             title="Go to HomePage"
             onPress={() => navigation.navigate('Home')}

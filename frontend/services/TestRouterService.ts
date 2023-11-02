@@ -1,17 +1,13 @@
-const url: string = 'http://localhost:8000/test/';
+import { API_URL } from '@env'
+import axios from 'axios';
+import httpClient from '../HttpClient';
+
 
 export const getTest = async () => {
     try {
-        const response = await fetch(`${url}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.message;
+        const response = await httpClient.get('/');
+        return response;
     } catch (error) {
         console.error("There was a problem fetching the data:", error);
-        throw error;
     }
 }
