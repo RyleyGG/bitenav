@@ -2,6 +2,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+from loguru import logger
+from datetime import datetime
 
 cwd = Path(__file__).parent.parent.parent
 
@@ -20,3 +22,5 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+logger.add(cwd / 'backend' / 'logs' / f'{str(int(datetime.now().timestamp()))}.log')

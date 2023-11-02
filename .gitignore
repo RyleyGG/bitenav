@@ -7,3 +7,5 @@ backend/services/__pycache__
 .expo
 frontend/.env
 backend/.venv
+backend/logs/*
+!backend/logs/.gitkeep
