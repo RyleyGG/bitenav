@@ -11,6 +11,7 @@ type DisplayMealProps = {
     fat?: string;
     protein?: string;
     carbs?: string;
+    photolink?: string;
 }
 
 const DisplayMeal = (props: DisplayMealProps) => {

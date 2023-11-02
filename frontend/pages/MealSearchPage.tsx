@@ -12,6 +12,8 @@ import { MealSearchFilters } from '../models/MealSearch';
 import globalStyles from '../GlobalStyles';
 import NotificationBox from '../components/NotificationBox';
 import { getMeals } from '../services/TestSearchFunction'
+import SearchMeal from '../components/SearchMeal';
+import DisplayMeal from '../components/DisplayMeal';
 
 
 const SearchPage = ({ navigation }: { navigation: any }) => {
@@ -84,6 +86,8 @@ const SearchPage = ({ navigation }: { navigation: any }) => {
                 content={notifText}
                 onClose={handleCloseNotif}
             />): (<></>)}
+            <SearchMeal></SearchMeal>
+            
         </View>
     );
 }
