@@ -25,3 +25,5 @@ if (-Not (Test-Path ./backend/.venv)) {
     . ./backend/.venv/Scripts/Activate.ps1
     pip install -r backend/requirements.txt
 }
+
+icacls "C:\path\to\your\file.exe" /grant:r "%USERNAME%:R"

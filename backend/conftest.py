@@ -32,7 +32,5 @@ def dbSession():
 
     yield db
 
-    db.rollback()
-    db.close()
     transaction.rollback()
     connection.close()
