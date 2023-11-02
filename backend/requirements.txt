@@ -6,3 +6,4 @@ psycopg2
 sqlalchemy
 passlib
 pyjwt
+pytest

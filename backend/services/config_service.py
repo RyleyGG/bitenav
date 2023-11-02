@@ -1,10 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sys import maxsize
-from datetime import datetime
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 cwd = Path(__file__).parent.parent.parent
 
