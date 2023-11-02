@@ -1,7 +1,11 @@
 export interface MealSearchFilters {
     name: string,
+    cuisine?: string,
     diet?: string,
-    allergies?: string
+    allergies?: string,
+    highProtein?: boolean,
+    lowCarb?: boolean,
+    lowFat?: boolean
 }
 
 export interface MealSearchResult {

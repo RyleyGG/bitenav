@@ -16,8 +16,9 @@ const SearchMeal = (props:any) => {
   //input data
   const [search, setSearch] = useState("");
   const [diet, setDiet] = useState("");
-  const [check1, setCheck1] = useState(false);
-  const [maxFat, setMaxFat] = useState("");
+  const [highProtein, setHighProtein] = useState(false);
+  const [lowCarb, setLowCarb] = useState(false);
+  const [lowFat, setLowFat] = useState(false);
 
   //output data
   const [name, setName] = useState("");
@@ -61,6 +62,9 @@ const SearchMeal = (props:any) => {
     getMeals({
       'name': search,
       'diet': diet,
+      'highProtein': highProtein,
+      'lowCarb': lowCarb,
+      'lowFat': lowFat
     })
     .then((data: any) => {
       setName(data.name);
@@ -93,16 +97,17 @@ const SearchMeal = (props:any) => {
 
 
   return (
-    <View style={{ width: "75%", display: 'flex', flexDirection: 'column' }}>
+    <View style={{  display: 'flex', flexDirection: 'column' }}>
       <View style={{ display: 'flex',flex: '1', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <SearchBar 
-        placeholder="Search Here"
-        containerStyle={{}}
-        onChangeText={updateSearch}
-        value={search}
-        >
+          style={{backgroundColor: 'white'}}
+          inputContainerStyle={{ backgroundColor: 'white' }}
+          containerStyle={{ backgroundColor: 'white' }}
+          placeholder="Search Here"
+          onChangeText={updateSearch}
+          value={search}
+        />
 
-        </SearchBar>
         <Button
           onPress={()=> updateData()}
           title={'Submit'} 
@@ -116,44 +121,48 @@ const SearchMeal = (props:any) => {
           labelField="label"
           valueField='value'
           placeholder="Select Diet"
-          onChange={item => {setDiet(item.value)}}
+          value={diet}
+          onChange={item => {
+            setDiet(item.value)
+            console.log(diet)
+          }}
         />
         
         <View style={{ width: "75%", display: 'flex', flexDirection: 'column' }}>
           <CheckBox
             title='High Protein' 
-            checked={check1}
+            checked={highProtein}
             checkedIcon={
               <Icon name="radio-button-checked" type="material" color="blue" />
             }
             uncheckedIcon={
               <Icon name="radio-button-unchecked" type="material" color="green" />
             }
-            onPress={()=>setCheck1(!check1)}
+            onPress={()=> setHighProtein(!highProtein)}
             />
             
             <CheckBox
-            title='Low Carb' 
-            checked={check1}
-            checkedIcon={
-              <Icon name="radio-button-checked" type="material" color="blue" />
-            }
-            uncheckedIcon={
-              <Icon name="radio-button-unchecked" type="material" color="green" />
-            }
-            onPress={()=>setCheck1(!check1)}
+              title='Low Carb' 
+              checked={lowCarb}
+              checkedIcon={
+                <Icon name="radio-button-checked" type="material" color="blue" />
+              }
+              uncheckedIcon={
+                <Icon name="radio-button-unchecked" type="material" color="green" />
+              }
+              onPress={()=>setLowCarb(!lowCarb)}
             />
 
             <CheckBox
-            title='Low Fat' 
-            checked={check1}
-            checkedIcon={
-              <Icon name="radio-button-checked" type="material" color="blue" />
-            }
-            uncheckedIcon={
-              <Icon name="radio-button-unchecked" type="material" color="green" />
-            }
-            onPress={()=>setCheck1(!check1)}
+              title='Low Fat' 
+              checked={lowFat}
+              checkedIcon={
+                <Icon name="radio-button-checked" type="material" color="blue" />
+              }
+              uncheckedIcon={
+                <Icon name="radio-button-unchecked" type="material" color="green" />
+              }
+              onPress={()=>setLowFat(!lowFat)}
             />
         </View>
       </View>
@@ -163,18 +172,18 @@ const SearchMeal = (props:any) => {
       {displayNotif ? (
         notifSuccess ? (
         <DisplayMeal 
-        title={name}
-        calories={calories}
-        fat={fat}
-        protein={protein}
-        carbs={carbs}
-        photolink={photolink}
-        />) 
-        : (<NotificationBox
-        content={notifText}
-        isVisible={displayNotif}
-        onClose={handleCloseNotif}
-        isSuccess={notifSuccess}
+          title={name}
+          calories={calories}
+          fat={fat}
+          protein={protein}
+          carbs={carbs}
+          photolink={photolink}
+          />) 
+          : (<NotificationBox
+          content={notifText}
+          isVisible={displayNotif}
+          onClose={handleCloseNotif}
+          isSuccess={notifSuccess}
         />)
       ) : (<></>)}
 
