@@ -20,6 +20,10 @@ class SuccessfulUserAuth(BaseModel):
 
 class MealSearchFilters(BaseModel):
     name: Optional[str]
+    cuisine: Optional[str]
+    diet: Optional[str]
+    intolerance: Optional[str]
+    
 
 class MealSearchResult(BaseModel):
     name: str

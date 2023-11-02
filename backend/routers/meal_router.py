@@ -11,12 +11,18 @@ router = APIRouter()
 @router.post('/search', response_model = MealSearchResult, response_model_by_alias = False)
 async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(getDb)):
     
-    nameSearch = ''
+    searchFilters = ''
+    apiKey = 'f5c554fbdd43461eb5ff8af17aba8941'
+    api_return_amount = 3
+    # Need a loop to go through the search filters
     if incomingSearches.name:
-        nameSearch += f'query={incomingSearches.name}&'
-    if nameSearch[-1] == '&':
-        nameSearch = nameSearch[0:-2]
-    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey=f5c554fbdd43461eb5ff8af17aba8941&{nameSearch}'
+        searchFilters += f'query={incomingSearches.name}&'
+    
+
+    if searchFilters[-1] == '&':
+        searchFilters = searchFilters[0:-2]
+        
+    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={apiKey}&{api_return_amount}&{searchFilters}'
 
     results = requests.get(spoonacularURL)
 
