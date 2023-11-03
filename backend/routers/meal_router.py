@@ -22,7 +22,8 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
     if searchFilters[-1] == '&':
         searchFilters = searchFilters[0:-2]
         
-    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={apiKey}&{api_return_amount}&{searchFilters}'
+    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={apiKey}&number={api_return_amount}&{searchFilters}'
+    
 
     results = requests.get(spoonacularURL)
 
