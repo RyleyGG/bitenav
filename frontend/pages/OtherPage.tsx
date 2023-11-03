@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { getTest } from '../services/TestRouterService'
 
 const OtherPage = ({ navigation }: { navigation: any }) => {
-    const [testData, setTestData] = useState(null);
+    const [testData, setTestData] = useState('');
 
     useEffect(() => {
         getTestData();
@@ -14,9 +14,8 @@ const OtherPage = ({ navigation }: { navigation: any }) => {
     const getTestData = () => {
         getTest()
         .then((data: any) => { 
-            console.log(data);
-            setTestData(data); })
-        .catch((error: any) => { setTestData(error) });
+            setTestData(data.message); })
+        .catch((error: any) => { setTestData('uh oh') });
     }
 
     return (

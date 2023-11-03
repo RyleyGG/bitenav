@@ -6,11 +6,11 @@ const globalStyles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 1,
         paddingHorizontal: 10,
+        borderRadius: 15,
     },
     inlineLink: {
         color: 'blue',
-        cursor: 'pointer'
-    }
+    },
 });
 
 export default globalStyles;

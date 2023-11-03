@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from models.pydantic_models import User
 
-from typing import Optional
 
 class SignUpInfo(BaseModel):
     email_address: str
@@ -14,9 +13,9 @@ class SignInInfo(BaseModel):
     password: str
     
 class SuccessfulUserAuth(BaseModel):
-    user: User
     token_type: str
     access_token: str
+    refresh_token: str
 
 class MealSearchFilters(BaseModel):
     name: Optional[str]
@@ -27,3 +26,6 @@ class MealSearchFilters(BaseModel):
 
 class MealSearchResult(BaseModel):
     name: str
+    
+class RefreshToken(BaseModel):
+    refresh_token: str
