@@ -9,17 +9,15 @@ router = APIRouter()
 async def someFuncName():
     return {'message': 'Test Func'}
 
-@router.get('/someotherendpoint')
-async def otherFuncName(db: db):
-    newEntry = SomeTable(attrOne='someVal')
-    db.add(newEntry)
-    db.commit()
-
 @router.post('/user')
 async def create_user(db: Session = Depends(getDb)):
-    new_user = User(UserID = 22)
-    db.add(new_user)
-    db.commit()
+    new_user = User(UserID=22)
+    try:
+        db.add(new_user)
+        db.commit()
+    except Exception as e:
+        print(f"Error while creating user: {e}")
+    return {"message": "User created successfully"}
 
 @router.get('/user/{user_id}')
 async def get_user(user_id: int, db: Session = Depends(getDb)):
