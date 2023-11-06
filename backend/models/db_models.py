@@ -13,12 +13,20 @@ class User(Base):
     email_address = Column(String)
     password = Column(String)
 
+class UserToken(Base):
+    __tablename__ = 'UserTokens'
+    id = Column(Integer, primary_key=True, index=True)
+    UserName = Column(String)
+    Email = Column(String)
+    Password = Column(String)
+
+
 class Meal(Base):
     __tablename__ = 'Meals'
     MealID = Column(Integer, primary_key=True, index=True)
     Name = Column(String)
     Category = Column(String)
-    UserID = Column(Integer, ForeignKey('Users.UserID'))  # Foreign Key relationship to Users table
+    UserID = Column(Integer, ForeignKey('UserTokens.id'))  # Foreign Key relationship to Users table
 
 
 class MealIngredient(Base):

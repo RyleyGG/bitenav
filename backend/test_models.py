@@ -1,10 +1,10 @@
 import pytest
-from models.db_models import User, Meal, MealIngredient, Ingredient
+from models.db_models import UserToken, Meal, MealIngredient, Ingredient
 
 @pytest.fixture
 def sample_user():
     # Create a sample user instance for testing
-    user = User(UserName="testuser", Password="password", Email="testuser@example.com")
+    user = UserToken(UserName="testuser", Password="password", Email="testuser@example.com")
     return user
 
 def test_user_model_create(sample_user):

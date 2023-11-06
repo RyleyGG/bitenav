@@ -5,11 +5,9 @@ from services.config_service import Base, engine, SessionLocal
 
 
 # NOTE: Keep all table imports here at all times. Table schemas must be imported here to be properly initialized in the database.
-from models.db_models import User, Meal, Ingredient, MealIngredient
+from models.db_models import UserToken, Meal, Ingredient, MealIngredient
 
 Base.metadata.create_all(bind=engine)
-from models.db_models import User
-
 def getDb():
     db = SessionLocal()
     try:
