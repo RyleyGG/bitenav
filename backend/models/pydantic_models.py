@@ -1,10 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
-class User(BaseModel):
-    UserID: int
-    UserName: str
-    Password: str
-    Email: str
 
 class Meal(BaseModel):
     Name: str
@@ -19,3 +14,10 @@ class Ingredient(BaseModel):
 class MealIngredient(BaseModel):
     MealID: int
     IngredientID: int
+class User(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    email_address: str
+    first_name: str
+    last_name: str
+    password: str

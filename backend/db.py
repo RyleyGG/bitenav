@@ -8,6 +8,7 @@ from services.config_service import Base, engine, SessionLocal
 from models.db_models import User, Meal, Ingredient, MealIngredient
 
 Base.metadata.create_all(bind=engine)
+from models.db_models import User
 
 def getDb():
     db = SessionLocal()
@@ -15,4 +16,6 @@ def getDb():
         yield db
     finally:
         db.close()
-db = Annotated[Session, Depends(getDb)]
+
+if __name__ == "__main__":
+    Base.metadata.create_all(bind=engine)
