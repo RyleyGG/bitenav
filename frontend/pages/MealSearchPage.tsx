@@ -56,7 +56,7 @@ const SearchPage = ({ navigation }: { navigation: any }) => {
             , 3000)
         })
         .catch((error: any) => {
-            setNotifText('There was an error processing the search. Please try again.')
+            setNotifText('Oops! There was an error processing the search. Please try again.')
             setNotifSuccess(false);
             setDisplayNotif(true);
         });
@@ -67,7 +67,7 @@ const SearchPage = ({ navigation }: { navigation: any }) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '1.5vh' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <TextInput
                 placeholder="Meal Name"
                 onChangeText={setName}

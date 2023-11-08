@@ -1,7 +1,7 @@
 import { SearchBar, Input, CheckBox, Icon, Button} from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import React, {useState, useEffect} from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet, StyleProp } from 'react-native';
 import { sendSearch } from "../services/SearchMealService";
 import DisplayMeal from "./DisplayMeal";
 import { getMeals } from "../services/TestSearchFunction";
@@ -64,7 +64,10 @@ const SearchMeal = (props:any) => {
       'diet': diet,
       'highProtein': highProtein,
       'lowCarb': lowCarb,
-      'lowFat': lowFat
+      'lowFat': lowFat,
+      'cuisine': '',
+      'allergies': ''
+
     })
     .then((data: any) => {
       setName(data.name);
@@ -98,7 +101,7 @@ const SearchMeal = (props:any) => {
 
   return (
     <View style={{  display: 'flex', flexDirection: 'column' }}>
-      <View style={{ display: 'flex',flex: '1', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <SearchBar 
           style={{backgroundColor: 'white'}}
           inputContainerStyle={{ backgroundColor: 'white' }}
@@ -115,7 +118,7 @@ const SearchMeal = (props:any) => {
       </View>
 
 
-      <View style={{ display: 'flex',flex: '1', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}> 
+      <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}> 
         <Dropdown 
           data={dropdownData}
           labelField="label"

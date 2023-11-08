@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from routers import auth_router
+from routers import meal_router
 from services.config_service import config
 
 from services.config_service import config
@@ -15,6 +16,7 @@ from models.db_models import User as UserDb
 
 app = FastAPI()
 app.include_router(auth_router.router, prefix='/auth')
+app.include_router(meal_router.router, prefix='/meal')
 
 origins = ["*"]
 

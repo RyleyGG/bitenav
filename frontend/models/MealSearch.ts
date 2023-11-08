@@ -1,5 +1,5 @@
 export interface MealSearchFilters {
-    name: string,
+    name?: string,
     cuisine?: string,
     diet?: string,
     allergies?: string,
@@ -9,6 +9,7 @@ export interface MealSearchFilters {
 }
 
 export interface MealSearchResult {
+    id: string
     name: string
     calories: string,
     protein: string,

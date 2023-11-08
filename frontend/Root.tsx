@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage'
 import SigninPage from './pages/SigninPage'
 import SignupPage from './pages/SignupPage'
 import OtherPage from './pages/OtherPage'
+import SearchPage from './pages/MealSearchPage';
 import { AuthContext, AuthProvider } from './AuthContext';
 import { useContext, useEffect, useState } from 'react';
 
@@ -28,9 +29,10 @@ const AuthenticatedApp = () => {
   const UnauthenticatedApp = () => {
     return (
       <Stack.Navigator
-      initialRouteName='Sign-in'>
+      initialRouteName='Search'>
         <Stack.Screen name="Sign-in" component={SigninPage} />
         <Stack.Screen name="Sign-up" component={SignupPage} />
+        <Stack.Screen name="Search" component={SearchPage} />
       </Stack.Navigator>
     );
   };
