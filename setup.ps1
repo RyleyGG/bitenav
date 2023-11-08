@@ -11,7 +11,7 @@ if (-Not (Test-Path .env)) {
 
     "postgres_password=$postgres_password" | Out-File -FilePath .env -Append
     "auth_secret=$auth_secret" | Out-File -FilePath .env -Append
-    "API_URL=127.0.0.1" | Out-File -FilePath ./frontend/.env -Append
+    "API_URL=127.0.0.1" | Out-File -FilePath .env -Append
 }
 
 if (-Not (Test-Path ./backend/.venv)) {
