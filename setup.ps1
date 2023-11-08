@@ -26,4 +26,18 @@ if (-Not (Test-Path ./backend/.venv)) {
     pip install -r backend/requirements.txt
 }
 
-icacls "C:\path\to\your\file.exe" /grant:r "%USERNAME%:R"
+function Add-FullControlPermission($SecurityDescriptor) {
+    $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+    $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule($currentUser, "FullControl", "Allow")
+    $SecurityDescriptor.AddAccessRule($accessRule)
+    return $SecurityDescriptor
+}
+
+$FilePath = "./backend/api_start.sh"
+if (Test-Path $FilePath) {
+    $acl = Get-Acl $FilePath
+    $acl = Add-FullControlPermission $acl
+    Set-Acl -Path $FilePath -AclObject $acl
+} else {
+    Write-Host "Could not find api_start.sh file. Your repository may be corrupted, or need to be re-pulled."
+}
