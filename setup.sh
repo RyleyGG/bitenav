@@ -21,7 +21,7 @@ fi
 
 if [ -f "./backend/api_start.sh" ]; then
     chmod u+rwx "./backend/api_start.sh"
-    unix2dos "./backend/api_start.sh"
+    dos2unix "./backend/api_start.sh"
 else
     echo "Could not find api_start.sh file. Your repository may be corrupted, or need to be re-pulled."
 fi
