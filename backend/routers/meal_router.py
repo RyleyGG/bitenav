@@ -52,7 +52,7 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
     try:
         for meal in results.json()['results']:
             #print(meal)
-            NewMealResult = MealSearchResult(name=meal['title'], id = str(meal['id']), photolink='', calories='', protein='',carbs='', fat='')
+            NewMealResult = MealSearchResult(name=meal['title'], id = str(meal['id']), photolink=meal['image'], calories='', protein='',carbs='', fat='')
             #print(NewMealResult)
             returnMeals.append(NewMealResult)
     except Exception as e:
