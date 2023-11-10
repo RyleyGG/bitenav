@@ -6,3 +6,4 @@ backend/services/__pycache__
 .vscode
 .expo
 frontend/.env
+.venv
