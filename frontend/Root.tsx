@@ -22,6 +22,7 @@ const AuthenticatedApp = () => {
       }}>
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Other" component={OtherPage} />
+        <Stack.Screen name="Search" component={SearchPage} />
       </Stack.Navigator>
     );
   };
@@ -29,7 +30,7 @@ const AuthenticatedApp = () => {
   const UnauthenticatedApp = () => {
     return (
       <Stack.Navigator
-      initialRouteName='Search'>
+      initialRouteName='Sign-up'>
         <Stack.Screen name="Sign-in" component={SigninPage} />
         <Stack.Screen name="Sign-up" component={SignupPage} />
         <Stack.Screen name="Search" component={SearchPage} />
