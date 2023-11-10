@@ -1,5 +1,6 @@
 #!/bin/bash
 
+chmod u+rwx "./setup.sh"
 cd frontend
 npm install
 cd ../backend
