@@ -18,23 +18,14 @@ Bitenav utilizes a Python virtual environment to aid in dependency resolution.
     Windows: https://www.postgresql.org/download/windows/
     Mac (requires brew [https://brew.sh/]): Run brew install postgresql
     ```
-4. Setup environment (create .envs and virtual environment) (NOTE: if on Windows, these commands must be run in Git Bash):
+4. Setup environment (create .envs and virtual environment):
     ```
     cd [repository]
-    ./setup.ps1
+    ./setup.sh
+    ./run.sh
     ```
-5. Run the following commands to prep and activate the API and database docker containers:
-    ```
-    cd [repository]/backend
-    docker compose build
-    docker compose up
-    ```
-6. Compile and run the frontend. The simplest command to achieve this is:
-    ```
-    cd [repository]/frontend
-    npm install
-    npm run start
-    ```
+
+NOTE: if on Windows, shell scripts should be run in Git Bash to ensure compatibility.
 
 
 ### Running pytest
