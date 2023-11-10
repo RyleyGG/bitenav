@@ -25,3 +25,17 @@ if [ -f "./backend/api_start.sh" ]; then
 else
     echo "Could not find api_start.sh file. Your repository may be corrupted, or need to be re-pulled."
 fi
+
+if [ -f "./nuke.sh" ]; then
+    chmod u+rwx "./nuke.sh"
+    dos2unix "./nuke.sh"
+else
+    echo "Could not find nuke.sh file. Your repository may be corrupted, or need to be re-pulled."
+fi
+
+if [ -f "./run.sh" ]; then
+    chmod u+rwx "./run.sh"
+    dos2unix "./run.sh"
+else
+    echo "Could not find run.sh file. Your repository may be corrupted, or need to be re-pulled."
+fi
