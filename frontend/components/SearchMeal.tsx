@@ -104,8 +104,11 @@ const SearchMeal = (props:any) => {
       <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <SearchBar 
           style={{backgroundColor: 'white'}}
-          inputContainerStyle={{ backgroundColor: 'white' }}
+          inputContainerStyle={{ backgroundColor: 'white', borderColor: 'transparent' }}
           containerStyle={{ backgroundColor: 'white' }}
+          leftIconContainerStyle={{ display: 'none' }}
+          rightIconContainerStyle={{ display: 'none' }}
+          inputStyle={{ borderBottomColor: 'red' }}
           placeholder="Search Here"
           onChangeText={updateSearch}
           value={search}
