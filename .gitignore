@@ -6,3 +6,6 @@ backend/services/__pycache__
 .vscode
 .expo
 frontend/.env
+backend/.venv
+backend/logs/*
+!backend/logs/.gitkeep
