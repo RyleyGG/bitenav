@@ -6,11 +6,7 @@ import DisplayMeal from '../components/DisplayMeal';
 const HomePage = ({ navigation }: { navigation: any }) => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Landing Page</Text>
-        <Button
-            title="Go to OtherPage"
-            onPress={() => navigation.navigate('Other')}
-        />
+
         <Text>Search Page</Text>
         <Button
             title="Test Meal Search Function"

@@ -30,7 +30,7 @@ const AuthenticatedApp = () => {
   const UnauthenticatedApp = () => {
     return (
       <Stack.Navigator
-      initialRouteName='Sign-up'>
+      initialRouteName='Sign-in'>
         <Stack.Screen name="Sign-in" component={SigninPage} />
         <Stack.Screen name="Sign-up" component={SignupPage} />
         <Stack.Screen name="Search" component={SearchPage} />

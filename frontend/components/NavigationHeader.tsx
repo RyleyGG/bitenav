@@ -16,11 +16,6 @@ const NavigationHeader = ({ navigation }: { navigation: any }) => {
                 onPress={() => navigation.navigate('Home')}
             />
             <Button 
-                title="Other" 
-                type="clear" 
-                onPress={() => navigation.navigate('Other')}
-            />
-            <Button 
                 title="Sign Out" 
                 type="clear" 
                 onPress={initiateSignOut}

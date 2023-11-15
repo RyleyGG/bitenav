@@ -8,6 +8,7 @@ import { getMeals } from "../services/TestSearchFunction";
 import { MealSearchFilters } from "../models/MealSearch";
 import globalStyles from "../GlobalStyles";
 import NotificationBox from "./NotificationBox";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 
@@ -139,10 +140,10 @@ const SearchMeal = (props:any) => {
             title='High Protein' 
             checked={highProtein}
             checkedIcon={
-              <Icon name="radio-button-checked" type="material" color="blue" />
+              <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
             }
             uncheckedIcon={
-              <Icon name="radio-button-unchecked" type="material" color="green" />
+              <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
             }
             onPress={()=> setHighProtein(!highProtein)}
             />
@@ -151,10 +152,10 @@ const SearchMeal = (props:any) => {
               title='Low Carb' 
               checked={lowCarb}
               checkedIcon={
-                <Icon name="radio-button-checked" type="material" color="blue" />
+                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
               }
               uncheckedIcon={
-                <Icon name="radio-button-unchecked" type="material" color="green" />
+                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
               }
               onPress={()=>setLowCarb(!lowCarb)}
             />
@@ -163,10 +164,10 @@ const SearchMeal = (props:any) => {
               title='Low Fat' 
               checked={lowFat}
               checkedIcon={
-                <Icon name="radio-button-checked" type="material" color="blue" />
+                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
               }
               uncheckedIcon={
-                <Icon name="radio-button-unchecked" type="material" color="green" />
+                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
               }
               onPress={()=>setLowFat(!lowFat)}
             />
