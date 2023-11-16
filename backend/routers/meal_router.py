@@ -3,7 +3,8 @@ from db import getDb
 from sqlalchemy.orm import Session
 from services.config_service import config
 
-from models.dto_models import MealSearchFilters, MealSearchResult
+from models.db_models import CustomMeal as CustomMealDb
+from models.dto_models import MealSearchFilters, MealSearchResult, CustomMeal
 import requests
 from typing import List
 
@@ -98,6 +99,35 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
 
 
     return returnMeals[0]
+
+
+@router.post('/custom', response_model = CustomMeal, response_model_by_alias = False)
+async def createCustomMeal(incomingCustomMeal: CustomMeal, db: Session = Depends(getDb)):
+
+    newCustomMeal= CustomMealDb(
+        userID = incomingCustomMeal.userID,
+        name = incomingCustomMeal.name,
+        calories = incomingCustomMeal.calories,
+        fat = incomingCustomMeal.fat,
+        carbs = incomingCustomMeal.carbs,
+        protein = incomingCustomMeal.protein,
+        photolink = incomingCustomMeal.photolink
+        )
+
+    try:
+        db.add(newCustomMeal)
+        db.commit()
+        db.refresh(newCustomMeal)
+    except Exception as e:
+        print(str(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail='Error posting custom meal',
+        )
+        
+
+
+    return 
 
 
     

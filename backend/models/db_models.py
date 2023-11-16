@@ -4,6 +4,8 @@ import uuid
 
 from services.config_service import Base
 
+from typing import Optional
+
 
 class User(Base):
     __tablename__ = 'User'
@@ -12,3 +14,12 @@ class User(Base):
     last_name = Column(String)
     email_address = Column(String)
     password = Column(String)
+
+class CustomMeal(Base):
+    userID: str
+    name: Optional[str]
+    calories: Optional[str]
+    fat: Optional[str]
+    carbs: Optional[str]
+    protein: Optional[str]
+    photolink: Optional[str]

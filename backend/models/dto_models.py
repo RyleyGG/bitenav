@@ -36,6 +36,15 @@ class MealSearchResult(BaseModel):
     carbs: str
     fat: str
     photolink: str
+
+class CustomMeal(BaseModel):
+    userID: str
+    name: Optional[str]
+    calories: Optional[str]
+    fat: Optional[str]
+    carbs: Optional[str]
+    protein: Optional[str]
+    photolink: Optional[str]
     
 class RefreshToken(BaseModel):
     refresh_token: str
