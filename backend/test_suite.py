@@ -1,8 +1,12 @@
 from models.dto_models import SignUpInfo
 from services.config_service import logger
+from services.config_service import config
 from conftest import testClient, dbSession
 
+# NOTE: All tests must have dbSession and overrideDbDepend passed in
 _accessToken = None
+
+    
 
 def test_sign_up(testClient, dbSession, overrideDbDepend):
     res = testClient.post(
@@ -15,7 +19,6 @@ def test_sign_up(testClient, dbSession, overrideDbDepend):
         }
     )
 
-    logger.debug(res.json())
     assert res.status_code == 200
 
 def test_sign_in(testClient, dbSession, overrideDbDepend):
@@ -34,7 +37,7 @@ def test_sign_in(testClient, dbSession, overrideDbDepend):
 
     assert res.status_code == 200
 
-def test_basic_auth_check(testClient, dbSession):
+def test_basic_auth_check(testClient, dbSession, overrideDbDepend):
     logger.debug(_accessToken)
     res = testClient.get('/', headers={'Authorization': f'Bearer {_accessToken}'})
 
