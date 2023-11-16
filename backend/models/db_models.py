@@ -26,12 +26,12 @@ class Meal(Base):
     MealID = Column(Integer, primary_key=True, index=True)
     Name = Column(String)
     Category = Column(String)
-    UserID = Column(Integer, ForeignKey('UserTokens.id'))  # Foreign Key relationship to Users table
+    UserID = Column(UUID(as_uuid=True), ForeignKey('User.id'))  # Foreign Key relationship to Users table
 
 
 class MealIngredient(Base):
     __tablename__ = 'MealIngredients'
-    MealIngredients = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     MealID = Column(Integer, ForeignKey('Meals.MealID'))  # Foreign Key relationship to Meals table
     IngredientID = Column(Integer, ForeignKey('Ingredients.IngredientID'))
 

@@ -1,5 +1,5 @@
 import uuid
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 class UserToken(BaseModel):
     id: int
@@ -10,7 +10,7 @@ class UserToken(BaseModel):
 class Meal(BaseModel):
     Name: str
     Category: str
-    UserID: int
+    UserID: uuid.UUID
 
 class Ingredient(BaseModel):
     Name: str
@@ -22,7 +22,6 @@ class MealIngredient(BaseModel):
     IngredientID: int
 
 class User(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
     id: uuid.UUID
     email_address: str
     first_name: str
