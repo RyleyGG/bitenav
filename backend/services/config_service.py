@@ -16,7 +16,7 @@ class Config(BaseSettings):
     access_token_lifetime: int = 30
     refresh_token_lifetime: int = 7 * 1440 # days * minutes in a day
     model_config = SettingsConfigDict(env_file=config_dir / '.env', from_attributes=True, extra='allow')
-    model_config = SettingsConfigDict(env_file=cwd / '.env')
+    
 config: Config = Config()
 
 dbUrl = f'postgresql://postgres:{config.postgres_password}@db:5432/postgres'

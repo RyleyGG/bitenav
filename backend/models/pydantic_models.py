@@ -1,12 +1,6 @@
 import uuid
 from pydantic import BaseModel
 
-class UserToken(BaseModel):
-    id: int
-    UserName: str
-    Email: str
-    Password: str
-
 class Meal(BaseModel):
     Name: str
     Category: str

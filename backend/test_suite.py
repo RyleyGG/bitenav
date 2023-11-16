@@ -42,17 +42,6 @@ def test_basic_auth_check(testClient, dbSession):
     assert res.status_code == 200
     assert res.json()['message'] == 'Hello World'
 
-def sample_user():
-    # Create a sample user instance for testing
-    user = UserToken(UserName="testuser", Password="password", Email="testuser@example.com")
-    return user
-
-def test_user_model_create(sample_user):
-    # Test the creation of a user
-    assert sample_user.UserName == "testuser"
-    assert sample_user.Password == "password"
-    assert sample_user.Email == "testuser@example.com"
-
 def test_meal_model_create():
     # Create a sample meal instance
     meal = Meal(Name="Spaghetti", Category="Pasta")
