@@ -16,7 +16,6 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
     #Building the Spoonacular Request
     searchFilters = ''
     api_return_amount = 1
-    api_key = 'f5c554fbdd43461eb5ff8af17aba8941'
 
     if incomingSearches.name:
         searchFilters += f'query={incomingSearches.name}&'
@@ -42,7 +41,7 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
     if searchFilters[-1] == '&':
         searchFilters = searchFilters[0:-1]
         
-    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={api_key}&number={api_return_amount}&{searchFilters}'
+    spoonacularURL = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={config.api_key}&number={api_return_amount}&{searchFilters}'
     
     print(spoonacularURL)
     results = requests.get(spoonacularURL)
@@ -70,7 +69,7 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
         for recipe in returnMeals:
 
             # We start by generating the url to get nutritional information on the meal
-            nutritionalURL = f'https://api.spoonacular.com/recipes/{recipe.id}/nutritionWidget.json/?apiKey={api_key}'
+            nutritionalURL = f'https://api.spoonacular.com/recipes/{recipe.id}/nutritionWidget.json/?apiKey={config.api_key}'
             
             # Next, we make the call to the API and store the results in a variable
             nutritionalInfo = requests.get(nutritionalURL)
@@ -85,10 +84,6 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
                     recipe.carbs = macros['amount']
                 elif macros['name'] == 'Fat':
                     recipe.fat = macros['amount']
-
-            #https://api.spoonacular.com/recipes/informationBulk?apiKey=f5c554fbdd43461eb5ff8af17aba8941&ids=1003464,1003465&includeNutrition=true
-            #https://api.spoonacular.com/recipes/1003464/nutritionWidget.json/?apiKey=f5c554fbdd43461eb5ff8af17aba8941
-            #https://api.spoonacular.com/recipes/random?apiKey=f5c554fbdd43461eb5ff8af17aba8941
     except Exception as e:
         print(str(e))
         raise HTTPException(
@@ -105,7 +100,7 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
 async def createCustomMeal(incomingCustomMeal: CustomMeal, db: Session = Depends(getDb)):
 
     newCustomMeal= CustomMealDb(
-        userID = incomingCustomMeal.userID,
+        userID = incomingCustomMeal.user_id,
         name = incomingCustomMeal.name,
         calories = incomingCustomMeal.calories,
         fat = incomingCustomMeal.fat,

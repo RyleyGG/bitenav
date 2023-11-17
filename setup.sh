@@ -40,3 +40,11 @@ if [ -f "./run.sh" ]; then
 else
     echo "Could not find run.sh file. Your repository may be corrupted, or need to be re-pulled."
 fi
+
+
+if [ -f "./mini_nuke.sh" ]; then
+    chmod u+rwx "./mini_nuke.sh"
+    dos2unix "./mini_nuke.sh"
+else
+    echo "Could not find mini_nuke.sh file. Your repository may be corrupted, or need to be re-pulled."
+fi

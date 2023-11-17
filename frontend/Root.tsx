@@ -33,7 +33,6 @@ const AuthenticatedApp = () => {
       initialRouteName='Sign-in'>
         <Stack.Screen name="Sign-in" component={SigninPage} />
         <Stack.Screen name="Sign-up" component={SignupPage} />
-        <Stack.Screen name="Search" component={SearchPage} />
       </Stack.Navigator>
     );
   };

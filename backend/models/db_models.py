@@ -16,10 +16,11 @@ class User(Base):
     password = Column(String)
 
 class CustomMeal(Base):
-    userID: str
-    name: Optional[str]
-    calories: Optional[str]
-    fat: Optional[str]
-    carbs: Optional[str]
-    protein: Optional[str]
-    photolink: Optional[str]
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), default=uuid.uuid4)
+    name = Column(String)
+    calories = Column(String)
+    fat = Column(String)
+    carbs = Column(String)
+    protein = Column(String)
+    photolink = Column(String)
