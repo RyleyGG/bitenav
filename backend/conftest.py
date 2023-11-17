@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from api import app
 from db import Base, getDb
 from services.config_service import dbUrl
+from models.db_models import User
 
 @pytest.fixture(scope="module")
 def overrideDbDepend(dbSession):
@@ -24,11 +25,14 @@ def dbSession():
     TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     connection = engine.connect()
     transaction = connection.begin()
-
     Base.metadata.bind = engine
     Base.metadata.create_all(bind=engine)
 
     db = TestingSessionLocal(bind=connection)
+
+    # delete all data before starting tests
+    db.query(User).delete()
+    db.commit()
 
     yield db
 
