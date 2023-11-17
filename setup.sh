@@ -9,6 +9,7 @@ if [ ! -f .env ]; then
     echo "postgres_password=$postgres_password" >> .env
     echo "auth_secret=$auth_secret" >> .env
     echo "API_URL=http://127.0.0.1:8000" >> .env
+    echo "api_key=some api key" >> .env
 fi
 
 if [ ! -d ./backend/.venv ]; then

@@ -13,3 +13,4 @@ frontend/node_modules
 backend/logs/*
 !backend/logs/.gitkeep
 /.expo
+.DS_Store
