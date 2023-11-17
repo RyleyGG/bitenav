@@ -1,6 +1,13 @@
 import uuid
 from pydantic import BaseModel
 
+class User(BaseModel):
+    id: uuid.UUID
+    email_address: str
+    first_name: str
+    last_name: str
+    password: str
+    
 class Meal(BaseModel):
     Name: str
     Category: str
@@ -15,9 +22,4 @@ class MealIngredient(BaseModel):
     MealID: int
     IngredientID: int
 
-class User(BaseModel):
-    id: uuid.UUID
-    email_address: str
-    first_name: str
-    last_name: str
-    password: str
+
