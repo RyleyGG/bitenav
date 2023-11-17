@@ -12,7 +12,7 @@ class User(BaseModel):
 
 class CustomMeal(BaseModel):
     id: uuid.UUID
-    user_id: str
+    user_id: uuid.UUID
     name: Optional[str]
     calories: Optional[str]
     fat: Optional[str]

@@ -3,12 +3,14 @@ import { MealSearchFilters, MealSearchResult } from '../models/MealSearch';
 import httpClient from '../HttpClient';
 import { API_URL } from '@env'
 
+const url = `${API_URL}/meal`;
+
 export const getMeals = async (mealObj: MealSearchFilters) => {
     try {
         const requestOptions = {
             headers: { 'Content-Type': 'application/json' }
         };
-        const response = await httpClient.post(`${API_URL}/search`, mealObj, requestOptions);
+        const response = await httpClient.post(`${url}/search`, mealObj, requestOptions);
 
         return response;
     } catch (error) {
