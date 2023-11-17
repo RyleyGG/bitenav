@@ -43,19 +43,16 @@ def test_basic_auth_check(testClient, dbSession):
     assert res.json()['message'] == 'Hello World'
 
 def test_meal_model_create():
-    # Create a sample meal instance
     meal = Meal(Name="Spaghetti", Category="Pasta")
     assert meal.Name == "Spaghetti"
     assert meal.Category == "Pasta"
 
 def test_meal_ingredient_model_create():
-    # Create a sample meal ingredient instance
     meal_ingredient = MealIngredient(MealID=1, IngredientID=1)
     assert meal_ingredient.MealID == 1
     assert meal_ingredient.IngredientID == 1
 
 def test_ingredient_model_create():
-    # Create a sample ingredient instance
     ingredient = Ingredient(Name="Tomato", Calories=20.0, Protein=1.0)
     assert ingredient.Name == "Tomato"
     assert ingredient.Calories == 20.0

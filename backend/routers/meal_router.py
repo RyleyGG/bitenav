@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
-from db import db, getDb, Session
-from models.db_models import User, Meal, Ingredient, MealIngredient
+from fastapi import APIRouter, HTTPException, status, Depends
+from db import getDb
+from sqlalchemy.orm import Session
+from models.pydantic_models import Meal, User
 
 
 router = APIRouter()
-
 
 @router.post('/meal')
 async def create_meal(meal_name: str, category: str, user_id: str, db: Session = Depends(getDb)):

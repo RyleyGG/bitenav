@@ -16,6 +16,7 @@ from models.db_models import User as UserDb
 app = FastAPI()
 app.include_router(auth_router.router, prefix='/auth')
 app.include_router(meal_router.router, prefix='/meal')
+app.include_router(meal_router.router, prefix='/ingredient')
 
 origins = ["*"]
 
