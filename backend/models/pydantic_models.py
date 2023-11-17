@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 from pydantic import BaseModel
 
 class User(BaseModel):
@@ -7,6 +8,16 @@ class User(BaseModel):
     first_name: str
     last_name: str
     password: str
+
+class CustomMeal(BaseModel):
+    id: uuid.UUID
+    user_id: uuid.UUID
+    name: Optional[str]
+    calories: Optional[str]
+    fat: Optional[str]
+    carbs: Optional[str]
+    protein: Optional[str]
+    photolink: Optional[str]
     
 class Meal(BaseModel):
     Name: str
@@ -21,5 +32,3 @@ class Ingredient(BaseModel):
 class MealIngredient(BaseModel):
     MealID: int
     IngredientID: int
-
-

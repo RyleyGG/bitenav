@@ -6,6 +6,7 @@ psycopg2
 sqlalchemy
 passlib
 pyjwt
+requests
 pytest
 httpx
 loguru

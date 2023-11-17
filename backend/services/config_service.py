@@ -21,6 +21,7 @@ class Config(BaseSettings):
     auth_algo: str = 'HS256'
     access_token_lifetime: int = 30
     refresh_token_lifetime: int = 7 * 1440 # days * minutes in a day
+    api_key: str = ''
     model_config = SettingsConfigDict(env_file=env_dir / '.env', from_attributes=True, extra='allow')
 config: Config = Config()
 

@@ -9,6 +9,7 @@ if [ ! -f .env ]; then
     echo "postgres_password=$postgres_password" >> .env
     echo "auth_secret=$auth_secret" >> .env
     echo "API_URL=http://127.0.0.1:8000" >> .env
+    echo "api_key=some api key" >> .env
 fi
 
 if [ ! -d ./backend/.venv ]; then
@@ -38,4 +39,12 @@ if [ -f "./run.sh" ]; then
     dos2unix "./run.sh"
 else
     echo "Could not find run.sh file. Your repository may be corrupted, or need to be re-pulled."
+fi
+
+
+if [ -f "./mini_nuke.sh" ]; then
+    chmod u+rwx "./mini_nuke.sh"
+    dos2unix "./mini_nuke.sh"
+else
+    echo "Could not find mini_nuke.sh file. Your repository may be corrupted, or need to be re-pulled."
 fi

@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage'
 import SigninPage from './pages/SigninPage'
 import SignupPage from './pages/SignupPage'
 import OtherPage from './pages/OtherPage'
+import SearchPage from './pages/MealSearchPage';
 import { AuthContext, AuthProvider } from './AuthContext';
 import { useContext, useEffect, useState } from 'react';
 
@@ -21,6 +22,7 @@ const AuthenticatedApp = () => {
       }}>
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Other" component={OtherPage} />
+        <Stack.Screen name="Search" component={SearchPage} />
       </Stack.Navigator>
     );
   };

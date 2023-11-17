@@ -5,7 +5,7 @@ from models.pydantic_models import Ingredient
 
 router = APIRouter()
 
-@router.post('/ingredient')
+@router.post('/', response_model=Ingredient, response_model_by_alias=False)
 async def create_ingredient(name: str, calories: float, protein: float, db: Session = Depends(getDb)):
     new_ingredient = Ingredient(Name=name, Calories=calories, Protein=protein)
     try:
@@ -17,12 +17,12 @@ async def create_ingredient(name: str, calories: float, protein: float, db: Sess
         db.rollback()
         raise HTTPException(status_code=500, detail="Error creating ingredient")
 
-    return {"message": "Ingredient created successfully", "ingredient_id": str(new_ingredient.IngredientID)}
+    return new_ingredient
 
-@router.get('/ingredient/{ingredient_id}')
+@router.get('/{ingredient_id}', response_model=Ingredient)
 async def get_ingredient(ingredient_id: int, db: Session = Depends(getDb)):
     ingredient = db.query(Ingredient).filter(Ingredient.IngredientID == ingredient_id).first()
     if ingredient is None:
         return {"message": "Ingredient not found"}
     
-    return {"ingredient_id": ingredient.IngredientID, "name": ingredient.Name, "calories": ingredient.Calories, "protein": ingredient.Protein}
+    return Ingredient

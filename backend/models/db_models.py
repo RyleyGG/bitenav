@@ -4,7 +4,6 @@ import uuid
 
 from services.config_service import Base
 
-
 class User(Base):
     __tablename__ = 'User'
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
@@ -13,23 +12,26 @@ class User(Base):
     email_address = Column(String)
     password = Column(String)
 
-class Meal(Base):
-    __tablename__ = 'Meals'
-    MealID = Column(Integer, primary_key=True, index=True)
-    Name = Column(String)
-    Category = Column(String)
-    UserID = Column(UUID(as_uuid=True), ForeignKey('User.id'))  # Foreign Key relationship to Users table
-
+class CustomMeal(Base):
+    __tablename__ = 'CustomMeal'
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('User.id'), default=uuid.uuid4)
+    name = Column(String)
+    calories = Column(String)
+    fat = Column(String)
+    carbs = Column(String)
+    protein = Column(String)
+    photolink = Column(String)
 
 class MealIngredient(Base):
-    __tablename__ = 'MealIngredients'
-    id = Column(Integer, primary_key=True, index=True)
-    MealID = Column(Integer, ForeignKey('Meals.MealID'))  # Foreign Key relationship to Meals table
-    IngredientID = Column(Integer, ForeignKey('Ingredients.IngredientID'))
+    __tablename__ = 'MealIngredient'
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    meal_id = Column(UUID(as_uuid=True), ForeignKey('CustomMeal.id'))  # Foreign Key relationship to Meals table
+    ingredient_id = Column(UUID(as_uuid=True), ForeignKey('Ingredient.id'))
 
 class Ingredient(Base):
-    __tablename__ = 'Ingredients'
-    IngredientID = Column(Integer, primary_key=True, index=True)
+    __tablename__ = 'Ingredient'
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     Name = Column(String)
     Calories = Column(Float)
     Protein = Column(Float)

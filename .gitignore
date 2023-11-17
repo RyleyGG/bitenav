@@ -9,3 +9,8 @@ frontend/.env
 backend/.venv
 backend/logs/*
 !backend/logs/.gitkeep
+frontend/node_modules
+backend/logs/*
+!backend/logs/.gitkeep
+/.expo
+.DS_Store
