@@ -1,4 +1,5 @@
 from models.dto_models import SignUpInfo
+from models.db_models import UserToken, Meal, MealIngredient, Ingredient
 from services.config_service import logger
 from conftest import testClient, dbSession
 
@@ -40,3 +41,19 @@ def test_basic_auth_check(testClient, dbSession):
 
     assert res.status_code == 200
     assert res.json()['message'] == 'Hello World'
+
+def test_meal_model_create():
+    meal = Meal(Name="Spaghetti", Category="Pasta")
+    assert meal.Name == "Spaghetti"
+    assert meal.Category == "Pasta"
+
+def test_meal_ingredient_model_create():
+    meal_ingredient = MealIngredient(MealID=1, IngredientID=1)
+    assert meal_ingredient.MealID == 1
+    assert meal_ingredient.IngredientID == 1
+
+def test_ingredient_model_create():
+    ingredient = Ingredient(Name="Tomato", Calories=20.0, Protein=1.0)
+    assert ingredient.Name == "Tomato"
+    assert ingredient.Calories == 20.0
+    assert ingredient.Protein == 1.0
