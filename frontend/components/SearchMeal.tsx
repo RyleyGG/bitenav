@@ -1,7 +1,7 @@
 import { SearchBar, Input, CheckBox, Icon, Button} from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, StyleProp } from 'react-native';
+import { View, Text, StyleSheet, StyleProp, Dimensions } from 'react-native';
 import { sendSearch } from "../services/SearchMealService";
 import DisplayMeal from "./DisplayMeal";
 import { getMeals } from "../services/TestSearchFunction";
@@ -10,8 +10,7 @@ import globalStyles from "../GlobalStyles";
 import NotificationBox from "./NotificationBox";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-
-
+const { width, height } = Dimensions.get('window');
 
 const SearchMeal = (props:any) => {
   //input data
@@ -34,6 +33,9 @@ const SearchMeal = (props:any) => {
   const [notifSuccess, setNotifSuccess] = React.useState(false);
   const [notifText, setNotifText] = React.useState('');
 
+  const [debounceTimeout, setDebounceTimeout] = useState<number | NodeJS.Timeout | null>(null);
+
+  // TODO: move this model to a centralized place
   const dropdownData = [
     {label: 'Vegan', value: 'Vegan'},
     {label: 'Gluten-Free', value: 'Gluten-Free'},
@@ -44,6 +46,14 @@ const SearchMeal = (props:any) => {
   useEffect(() => {
     checkDataValidity();
   }, [search]);
+
+  useEffect(() => {
+    return () => {
+        if (debounceTimeout) {
+            clearTimeout(debounceTimeout);
+        }
+    };
+  }, [debounceTimeout]);
 
   const checkDataValidity = () => {
 
@@ -56,7 +66,19 @@ const SearchMeal = (props:any) => {
   }
 
   const updateSearch = (search: any) => {
-    setSearch(search)
+    setSearch(search);
+    
+    if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+    }
+
+    if (search != '') {
+        const newTimeout = setTimeout(() => {
+            updateData();
+        }, 3000);
+
+        setDebounceTimeout(newTimeout);
+    }
   }
 
   const updateData = async () => {
@@ -101,28 +123,22 @@ const SearchMeal = (props:any) => {
 
 
   return (
-    <View style={{  display: 'flex', flexDirection: 'column' }}>
-      <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, flexDirection: 'column' }}>
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 0.015 * width }}>
         <SearchBar 
-          style={{backgroundColor: 'white'}}
           inputContainerStyle={{ backgroundColor: 'white', borderColor: 'transparent' }}
-          containerStyle={{ backgroundColor: 'white' }}
-          leftIconContainerStyle={{ display: 'none' }}
-          rightIconContainerStyle={{ display: 'none' }}
-          inputStyle={{ borderBottomColor: 'red' }}
-          placeholder="Search Here"
-          onChangeText={updateSearch}
+          searchIcon={<Ionicons name="md-search" size={18} color="black" />}
+          clearIcon={<Ionicons name="close-outline" size={18} color="black" onPress={() => updateSearch('')} />}
+          placeholder="Search Meals & Ingredients..."
+          containerStyle={{ ...globalStyles.basicInputField, width: 0.75 * width }}
+          onChangeText={ updateSearch }
           value={search}
         />
-
-        <Button
-          onPress={()=> updateData()}
-          title={'Submit'} 
-        />
+        <Ionicons name="filter" size={18} color="black" />
       </View>
 
 
-      <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}> 
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}> 
         <Dropdown 
           data={dropdownData}
           labelField="label"
