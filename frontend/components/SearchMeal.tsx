@@ -34,6 +34,7 @@ const SearchMeal = (props:any) => {
   const [notifText, setNotifText] = React.useState('');
 
   const [debounceTimeout, setDebounceTimeout] = useState<number | NodeJS.Timeout | null>(null);
+  const [showLoader, setShowLoader] = useState(false);
 
   // TODO: move this model to a centralized place
   const dropdownData = [
@@ -67,12 +68,14 @@ const SearchMeal = (props:any) => {
 
   const updateSearch = (search: any) => {
     setSearch(search);
-    
+    setShowLoader(false);
+
     if (debounceTimeout) {
         clearTimeout(debounceTimeout);
     }
 
     if (search != '') {
+        setShowLoader(true);
         const newTimeout = setTimeout(() => {
             updateData();
         }, 3000);
@@ -104,11 +107,7 @@ const SearchMeal = (props:any) => {
       setNotifSuccess(true);
       setDisplayNotif(true);
 
-      setTimeout((
-      ) => {
-          //navigation.navigate('Search');
-      }
-      , 3000)
+      setShowLoader(false);
     })
     .catch((error: any) => {
       setNotifText('There was an error processing the search. Please try again.')
@@ -129,6 +128,7 @@ const SearchMeal = (props:any) => {
           inputContainerStyle={{ backgroundColor: 'white', borderColor: 'transparent' }}
           searchIcon={<Ionicons name="md-search" size={18} color="black" />}
           clearIcon={<Ionicons name="close-outline" size={18} color="black" onPress={() => updateSearch('')} />}
+          showLoading={showLoader}
           placeholder="Search Meals & Ingredients..."
           containerStyle={{ ...globalStyles.basicInputField, width: 0.75 * width }}
           onChangeText={ updateSearch }
