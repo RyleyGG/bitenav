@@ -110,7 +110,7 @@ const SearchMeal = (props:any) => {
         setShowLoader(false);
       })
       .catch((error: any) => {
-        setNotifText('There was an error processing the search. Please try again.')
+        setNotifText('There was an error processing the search. Please try again.');
         setNotifSuccess(false);
         setDisplayNotif(true);
       });
