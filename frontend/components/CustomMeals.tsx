@@ -88,6 +88,7 @@ const CreateMealForm = () => {
         placeholder="Enter calories"
         keyboardType="numeric"
       />
+
       <Text style={styles.label}>Fats:</Text>
       <TextInput
         style={styles.input}
@@ -117,62 +118,63 @@ const CreateMealForm = () => {
 
       <Button title="Create Meal" onPress={handleCreateMeal} />
 
-      <Text style={styles.label}>Custom Meals:</Text>
+      <Text style={styles.label}></Text>
       <Button title="View Custom Meals" onPress={handleGetMeals} />
-      <div>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            padding: "30px",
-            alignItems: "center",
-          }}
-        >
-          {allMeals.map((meal, index) => (
-            <View
-              key={index}
-              style={{
-                backgroundColor: "#eee",
-                padding: "15px",
-                margin: "10px",
-                borderRadius: "8px",
-              }}
-            >
-              <Text style={{ fontWeight: "bold" }}>Meal Name: {meal.name}</Text>
-              <Text style={{ fontWeight: "bold" }}>
-                Calories: {meal.calories}
-              </Text>
-              <Text style={{ fontWeight: "bold" }}>Fat: {meal.fat}</Text>
-              <Text style={{ fontWeight: "bold" }}>
-                Protein: {meal.protein}
-              </Text>
-              <Text style={{ fontWeight: "bold" }}>Carbs: {meal.carbs}</Text>
-            </View>
-          ))}
-        </View>
-      </div>
+
+      <View style={styles.mealsContainer}>
+        {allMeals.map((meal, index) => (
+          <View key={index} style={styles.mealItemContainer}>
+            <Text style={styles.mealItemLabel}>Meal Name: {meal.name}</Text>
+            <Text style={styles.mealItemLabel}>Calories: {meal.calories}</Text>
+            <Text style={styles.mealItemLabel}>Fat: {meal.fat}</Text>
+            <Text style={styles.mealItemLabel}>Protein: {meal.protein}</Text>
+            <Text style={styles.mealItemLabel}>Carbs: {meal.carbs}</Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    backgroundColor: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: 1600,
+    margin: "auto",
+    padding: 50, // Increase padding for overall size
+    backgroundColor: "white",
   },
   label: {
-    fontSize: 16,
-    marginBottom: 4,
-    color: "#333",
+    fontSize: 18, // Increase font size for labels
+    marginBottom: 8, // Increase margin for labels
+    color: "gray",
   },
   input: {
     height: 40,
     borderColor: "#ccc",
     borderWidth: 1,
-    marginBottom: 8,
+    marginBottom: 16, // Increase margin for input fields
     paddingHorizontal: 8,
     borderRadius: 4,
   },
+  mealsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    padding: 16,
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  mealItemContainer: {
+    backgroundColor: "#eee",
+    padding: 16,
+    margin: 12, // Increase margin for meal items
+    borderRadius: 8,
+    width: "100%",
+  },
+  mealItemLabel: {
+    fontWeight: "bold",
+    fontSize: 16, // Increase font size for meal item labels
+  },
 });
-
 export default CreateMealForm;
