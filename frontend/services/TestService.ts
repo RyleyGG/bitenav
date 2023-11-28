@@ -5,8 +5,6 @@ import httpClient from '../HttpClient';
 
 
 export const getTest = async () => {
-    
-
     try {
         const response = await httpClient.get(`${API_URL}/`);
         return response;

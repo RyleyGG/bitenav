@@ -14,7 +14,7 @@ export const getMeals = async (mealObj: MealSearchFilters) => {
 
         return response;
     } catch (error) {
-        console.error("There was a problem fetching the data:", error.response);
+        console.error("There was a problem fetching the data:", error);
         throw error;
     }
 }

@@ -3,7 +3,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import React, {useState, useEffect} from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import DisplayMeal from "./DisplayMeal";
-import { getMeals } from "../services/TestSearchFunction";
+import { getMeals } from "../services/MealService";
 import globalStyles from "../GlobalStyles";
 import NotificationBox from "./NotificationBox";
 import Ionicons from '@expo/vector-icons/Ionicons';
