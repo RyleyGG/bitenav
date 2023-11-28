@@ -19,8 +19,8 @@ const globalStyles = StyleSheet.create({
         borderWidth: 1,
         paddingHorizontal: 10,
         borderRadius: 15,
-        width: 0.95 * width,
-        height: 0.95 * height
+        width: height > width ? 0.95 * width : 0.35 * width,
+        height: height > width ? 0.95 * height : 0.55 * height
     }
 });
 

@@ -142,10 +142,11 @@ const SearchMeal = (props:any) => {
       <Dialog
         isVisible={showFilterModal}
         onBackdropPress={() => setShowFilterModal(false)}
-        style={globalStyles.basicDialog}
+        overlayStyle={globalStyles.basicDialog}
       >
         <View style={{ flex: 1, flexDirection: 'column' }}>
             {/* TODO: Change this and backend functionality to be multiselect */}
+            <Text style={{fontWeight: "bold"}}>Diet</Text>
             <Dropdown 
             data={dropdownData}
             labelField="label"
@@ -158,40 +159,29 @@ const SearchMeal = (props:any) => {
             }}
             />
             
-            <View style={{ width: "75%", display: 'flex', flexDirection: 'column' }}>
-            <CheckBox
-              title='High Protein' 
-              checked={highProtein}
-              checkedIcon={
-              <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
-              }
-              uncheckedIcon={
-              <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
-              }
-              onPress={()=> setHighProtein(!highProtein)}
-            />
+            <View style={{ width: "75%", display: 'flex', flexDirection: 'column', marginTop: 0.02 * height }}>
+            <Text style={{fontWeight: "bold"}}>Macronutrients</Text>
+              <CheckBox
+                title='High Protein' 
+                checked={highProtein}
+                checkedIcon={<Ionicons name="radio-button-on" type="material" color="blue" size={26} />}
+                uncheckedIcon={<Ionicons name="radio-button-off" type="material" color="green" size={26}/>}
+                onPress={()=> setHighProtein(!highProtein)}
+              />
               
               <CheckBox
               title='Low Carb' 
               checked={lowCarb}
-              checkedIcon={
-                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
-              }
-              uncheckedIcon={
-                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
-              }
+              checkedIcon={<Ionicons name="radio-button-on" type="material" color="blue" size={26} />}
+              uncheckedIcon={<Ionicons name="radio-button-off" type="material" color="green" size={26}/>}
               onPress={()=>setLowCarb(!lowCarb)}
               />
 
               <CheckBox
               title='Low Fat' 
               checked={lowFat}
-              checkedIcon={
-                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
-              }
-              uncheckedIcon={
-                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
-              }
+              checkedIcon={<Ionicons name="radio-button-on" type="material" color="blue" size={26} />}
+              uncheckedIcon={<Ionicons name="radio-button-off" type="material" color="green" size={26}/>}
               onPress={()=>setLowFat(!lowFat)}
               />
             </View>
