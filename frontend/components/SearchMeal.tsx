@@ -1,11 +1,9 @@
-import { SearchBar, Input, CheckBox, Icon, Button} from "@rneui/themed";
+import { SearchBar, Input, CheckBox, Icon, Button, Dialog } from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, StyleProp, Dimensions } from 'react-native';
-import { sendSearch } from "../services/SearchMealService";
+import { View, Text, Dimensions } from 'react-native';
 import DisplayMeal from "./DisplayMeal";
 import { getMeals } from "../services/TestSearchFunction";
-import { MealSearchFilters } from "../models/MealSearch";
 import globalStyles from "../GlobalStyles";
 import NotificationBox from "./NotificationBox";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -35,13 +33,15 @@ const SearchMeal = (props:any) => {
 
   const [debounceTimeout, setDebounceTimeout] = useState<number | NodeJS.Timeout | null>(null);
   const [showLoader, setShowLoader] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
   // TODO: move this model to a centralized place
   const dropdownData = [
     {label: 'Vegan', value: 'Vegan'},
     {label: 'Gluten-Free', value: 'Gluten-Free'},
     {label: 'Whole 30', value: 'Whole 30'},
-    {label: 'Keto', value: 'Keto'}
+    {label: 'Keto', value: 'Keto'},
+    {label: 'None', value: ''}
   ]
 
   useEffect(() => {
@@ -66,63 +66,138 @@ const SearchMeal = (props:any) => {
     }
   }
 
-  const updateSearch = (search: any) => {
-    setSearch(search);
+  const updateSearch = async (inputSearch: any) => {
+    setSearch(inputSearch);
     setShowLoader(false);
 
     if (debounceTimeout) {
-        clearTimeout(debounceTimeout);
+      clearTimeout(debounceTimeout);
     }
 
-    if (search != '') {
-        setShowLoader(true);
-        const newTimeout = setTimeout(() => {
-            updateData();
-        }, 3000);
+    if (inputSearch != '') {
+      setShowLoader(true);
+      const newTimeout = setTimeout(() => {
+        updateData(inputSearch);
+      }, 3000);
 
-        setDebounceTimeout(newTimeout);
+      setDebounceTimeout(newTimeout);
     }
   }
 
-  const updateData = async () => {
-    getMeals({
-      'name': search,
-      'diet': diet,
-      'highProtein': highProtein,
-      'lowCarb': lowCarb,
-      'lowFat': lowFat,
-      'cuisine': '',
-      'allergies': ''
+    const updateData = async (inputSearch: any) => {
+      getMeals({
+        'name': inputSearch,
+        'diet': diet,
+        'highProtein': highProtein,
+        'lowCarb': lowCarb,
+        'lowFat': lowFat,
+        'cuisine': '',
+        'allergies': ''
 
-    })
-    .then((data: any) => {
-      setName(data.name);
-      setCalories(data.calories);
-      setProtein(data.protein);
-      setCarbs(data.carbs);
-      setFat(data.fat);
-      setPhotolink(data.photolink)
+      })
+      .then((data: any) => {
+        setName(data.name);
+        setCalories(data.calories);
+        setProtein(data.protein);
+        setCarbs(data.carbs);
+        setFat(data.fat);
+        setPhotolink(data.photolink)
 
-      setNotifText(data.name)
-      setNotifSuccess(true);
-      setDisplayNotif(true);
+        setNotifText(data.name)
+        setNotifSuccess(true);
+        setDisplayNotif(true);
 
-      setShowLoader(false);
-    })
-    .catch((error: any) => {
-      setNotifText('There was an error processing the search. Please try again.')
-      setNotifSuccess(false);
-      setDisplayNotif(true);
-    });
+        setShowLoader(false);
+      })
+      .catch((error: any) => {
+        setNotifText('There was an error processing the search. Please try again.')
+        setNotifSuccess(false);
+        setDisplayNotif(true);
+      });
   }
 
-  const handleCloseNotif = () => {
+  const handleCloseNotif = async () => {
     setDisplayNotif(false);
 }
 
+  const handleFilterModalOpen = async () => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+
+    setShowLoader(false);
+    setShowFilterModal(true);
+  }
+  
+  const handleFilterApply = () => {
+      setShowFilterModal(false);
+      if (search) {
+          setShowLoader(true);
+          updateData(search);
+      }
+  }
 
   return (
     <View style={{ flex: 1, flexDirection: 'column' }}>
+      <Dialog
+        isVisible={showFilterModal}
+        onBackdropPress={() => setShowFilterModal(false)}
+        style={globalStyles.basicDialog}
+      >
+        <View style={{ flex: 1, flexDirection: 'column' }}>
+            {/* TODO: Change this and backend functionality to be multiselect */}
+            <Dropdown 
+            data={dropdownData}
+            labelField="label"
+            valueField='value'
+            placeholder="Select Diet"
+            value={diet}
+            onChange={item => {
+              setDiet(item.value)
+              console.log(diet)
+            }}
+            />
+            
+            <View style={{ width: "75%", display: 'flex', flexDirection: 'column' }}>
+            <CheckBox
+              title='High Protein' 
+              checked={highProtein}
+              checkedIcon={
+              <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
+              }
+              uncheckedIcon={
+              <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
+              }
+              onPress={()=> setHighProtein(!highProtein)}
+            />
+              
+              <CheckBox
+              title='Low Carb' 
+              checked={lowCarb}
+              checkedIcon={
+                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
+              }
+              uncheckedIcon={
+                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
+              }
+              onPress={()=>setLowCarb(!lowCarb)}
+              />
+
+              <CheckBox
+              title='Low Fat' 
+              checked={lowFat}
+              checkedIcon={
+                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
+              }
+              uncheckedIcon={
+                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
+              }
+              onPress={()=>setLowFat(!lowFat)}
+              />
+            </View>
+        </View>
+        <Button onPress={handleFilterApply}>Apply</Button>
+      </Dialog>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 0.015 * width }}>
         <SearchBar 
           inputContainerStyle={{ backgroundColor: 'white', borderColor: 'transparent' }}
@@ -134,60 +209,7 @@ const SearchMeal = (props:any) => {
           onChangeText={ updateSearch }
           value={search}
         />
-        <Ionicons name="filter" size={18} color="black" />
-      </View>
-
-
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}> 
-        <Dropdown 
-          data={dropdownData}
-          labelField="label"
-          valueField='value'
-          placeholder="Select Diet"
-          value={diet}
-          onChange={item => {
-            setDiet(item.value)
-            console.log(diet)
-          }}
-        />
-        
-        <View style={{ width: "75%", display: 'flex', flexDirection: 'column' }}>
-          <CheckBox
-            title='High Protein' 
-            checked={highProtein}
-            checkedIcon={
-              <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
-            }
-            uncheckedIcon={
-              <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
-            }
-            onPress={()=> setHighProtein(!highProtein)}
-            />
-            
-            <CheckBox
-              title='Low Carb' 
-              checked={lowCarb}
-              checkedIcon={
-                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
-              }
-              uncheckedIcon={
-                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
-              }
-              onPress={()=>setLowCarb(!lowCarb)}
-            />
-
-            <CheckBox
-              title='Low Fat' 
-              checked={lowFat}
-              checkedIcon={
-                <Ionicons name="radio-button-on" type="material" color="blue" size={26} />
-              }
-              uncheckedIcon={
-                <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
-              }
-              onPress={()=>setLowFat(!lowFat)}
-            />
-        </View>
+        <Ionicons name="filter" size={18} color="black" onPress={ handleFilterModalOpen }/>
       </View>
 
 
