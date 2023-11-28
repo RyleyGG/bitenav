@@ -10,11 +10,26 @@ export const postCustomMeal = async (mealObj: CustomMeal) => {
         const requestOptions = {
             headers: { 'Content-Type': 'application/json' }
         };
-        const response = await httpClient.post(`${API_URL}/custom`, mealObj, requestOptions);
+        const response = await httpClient.post(`${API_URL}/meal/custom`, mealObj, requestOptions);
 
         return response;
     } catch (error) {
         console.error("There was a problem posting the data:", error);
         throw error;
     }
+}
+
+
+export const getCustomMeal = async () => {
+  try {
+      const requestOptions = {
+          headers: { 'Content-Type': 'application/json' }
+      };
+      const response = await httpClient.get(`${API_URL}/meal/custom`, requestOptions);
+
+      return response;
+  } catch (error) {
+      console.error("There was a problem posting the data:", error);
+      throw error;
+  }
 }

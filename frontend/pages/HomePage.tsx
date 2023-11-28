@@ -12,6 +12,11 @@ const HomePage = ({ navigation }: { navigation: any }) => {
             title="Test Meal Search Function"
             onPress={() => navigation.navigate('Search')}
         />
+      <Text>Custom Meals</Text>
+      <Button
+        title="Test Custom Meals Function"
+        onPress={() => navigation.navigate("CustomMeals")}
+        />
       </View>
     );
 }
