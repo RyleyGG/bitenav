@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 
 import { postCustomMeal } from "../services/CustomMealService";
-
+import { getCustomMeal } from "../services/CustomMealService";
+import { CustomMeal } from "../models/CustomMeal";
 
 const CreateMealForm = () => {
   const [name, setName] = useState("");
@@ -16,6 +11,7 @@ const CreateMealForm = () => {
   const [fat, setFat] = useState("");
   const [carbs, setCarbs] = useState("");
   const [protein, setProtein] = useState("");
+  const [allMeals, setAllMeals] = useState<CustomMeal[]>([]);
 
   const [dataIsValid, setDataIsValid] = React.useState(false);
   const [displayNotif, setDisplayNotif] = React.useState(false);
@@ -62,8 +58,16 @@ const CreateMealForm = () => {
     }
   };
 
-  const handleGetMeals = () => {
-    console.log("Show meals");
+  const handleGetMeals = async () => {
+    getCustomMeal()
+      .then((data: any) => {
+        setAllMeals(data);
+      })
+      .catch((err: any) => {
+        setNotifText(err);
+        setNotifSuccess(false);
+        setDisplayNotif(true);
+      });
   };
 
   return (
@@ -114,7 +118,39 @@ const CreateMealForm = () => {
       <Button title="Create Meal" onPress={handleCreateMeal} />
 
       <Text style={styles.label}>Custom Meals:</Text>
-      <Button title="View Custom Meals" onPress={handleShowMeals} />
+      <Button title="View Custom Meals" onPress={handleGetMeals} />
+      <div>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            padding: "30px",
+            alignItems: "center",
+          }}
+        >
+          {allMeals.map((meal, index) => (
+            <View
+              key={index}
+              style={{
+                backgroundColor: "#eee",
+                padding: "15px",
+                margin: "10px",
+                borderRadius: "8px",
+              }}
+            >
+              <Text style={{ fontWeight: "bold" }}>Meal Name: {meal.name}</Text>
+              <Text style={{ fontWeight: "bold" }}>
+                Calories: {meal.calories}
+              </Text>
+              <Text style={{ fontWeight: "bold" }}>Fat: {meal.fat}</Text>
+              <Text style={{ fontWeight: "bold" }}>
+                Protein: {meal.protein}
+              </Text>
+              <Text style={{ fontWeight: "bold" }}>Carbs: {meal.carbs}</Text>
+            </View>
+          ))}
+        </View>
+      </div>
     </View>
   );
 };

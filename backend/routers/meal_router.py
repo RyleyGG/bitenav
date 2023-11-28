@@ -124,9 +124,9 @@ async def createCustomMeal(incomingCustomMeal: CustomMealPyd, db: Session = Depe
 
 @router.get('/custom', response_model=List[CustomMealPyd], response_model_by_alias=False)
 async def get_meal(db: Session = Depends(getDb), user: UserDb = Depends(auth_service.validateToken)):
-    meal = db.query(CustomMealDb).filter(CustomMealDb.Userid == user.id).first()
+    meal = db.query(CustomMealDb).filter(CustomMealDb.Userid == user.id).all()
     if meal is None:
-        return {"message": "Meal not found"}
+        return {"message": "Custom Meal not found"}
     
     return meal
     
