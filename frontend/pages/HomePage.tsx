@@ -9,8 +9,12 @@ const HomePage = ({ navigation }: { navigation: any }) => {
 
         <Text>Search Page</Text>
         <Button
-            title="Test Meal Search Function"
+            title="Test Meal Search"
             onPress={() => navigation.navigate('Search')}
+        />
+        <Button
+            title="Test Multi Meal Search"
+            onPress={() => navigation.navigate('MultiSearch')}
         />
       </View>
     );

@@ -41,10 +41,12 @@ const SearchMeal = (props:any) => {
     {label: 'Keto', value: 'Keto'}
   ]
 
+  // Everytime a name is entered the checkDataValidity function will run
   useEffect(() => {
     checkDataValidity();
   }, [search]);
 
+  // This function will check that the search field exist
   const checkDataValidity = () => {
 
     if (!search) {

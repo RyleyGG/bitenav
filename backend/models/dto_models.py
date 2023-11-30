@@ -26,6 +26,7 @@ class MealSearchFilters(BaseModel):
     highProtein: Optional[bool]
     lowCarb: Optional[bool]
     lowFat: Optional[bool]
+    offset: Optional[str]
     
 
 class MealSearchResult(BaseModel):

@@ -5,7 +5,8 @@ export interface MealSearchFilters {
     allergies?: string,
     highProtein?: boolean,
     lowCarb?: boolean,
-    lowFat?: boolean
+    lowFat?: boolean,
+    offset?: string
 }
 
 export interface MealSearchResult {
@@ -16,4 +17,8 @@ export interface MealSearchResult {
     carbs: string,
     fat: string,
     photolink: string
+}
+
+export interface ReturnedMeals {
+    returnedMeals: MealSearchResult[]
 }
