@@ -69,7 +69,6 @@ const CreateMealForm = () => {
           setTimeout(() => {
             setMealDeleted(false);
           }, 800);
-          console.log("Meal deleted");
         })
         .catch((err: any) => {
           alert("Error deleting meal");
@@ -99,9 +98,9 @@ const CreateMealForm = () => {
   };
 
   return (
-    <div>
+    <div> Raleigh
       {showMealForm}
-      <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto" }}>
+      <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto" }}>Raleigh
         {showMealForm && (
           <form
             style={{
@@ -184,7 +183,7 @@ const CreateMealForm = () => {
             </button>
           </form>
         )}
-
+          
         <div
           style={{
             display: "flex",
@@ -242,7 +241,7 @@ const CreateMealForm = () => {
       </div>
 
       {!showMealForm && (
-        <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto" }}>
+        <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto" }}>Raleigh
           <div
             style={{
               display: "flex",
@@ -252,7 +251,7 @@ const CreateMealForm = () => {
               padding: "1rem",
               borderRadius: "0.25rem",
             }}
-          >
+          > Raleigh
             <button
               onClick={() => setShowMealForm(true)}
               style={{
