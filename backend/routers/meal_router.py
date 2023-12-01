@@ -137,12 +137,3 @@ async def get_meal(meal_id: int, db: Session = Depends(getDb)):
         return {"message": "Meal not found"}
     
     return meal
-
-@router.delete('/custom', response_model=CustomMealPyd, response_model_by_alias=False)
-async def delete_meal(db: Session = Depends(getDb), user: UserDb = Depends(auth_service.validateToken)):
-    meal = db.query(CustomMealDb).filter(CustomMealDb.Userid == user.id).first()
-    if meal is None:
-        return {"message": "Meal not found"}
-    db.delete(meal)
-    db.commit()
-    return meal

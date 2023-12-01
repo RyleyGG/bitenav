@@ -1,21 +1,19 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
-import {
-  deleteCustomMeal,
-  postCustomMeal,
-} from "../services/CustomMealService";
+
+import { postCustomMeal } from "../services/CustomMealService";
 import { getCustomMeal } from "../services/CustomMealService";
 import { CustomMeal } from "../models/CustomMeal";
 
+
 const CreateMealForm = () => {
   const [name, setName] = useState("");
-  const [calories, setCalories] = useState("");
-  const [fat, setFat] = useState("");
-  const [carbs, setCarbs] = useState("");
-  const [protein, setProtein] = useState("");
+  const [calories, setCalories] = useState(0);
+  const [fat, setFat] = useState(0);
+  const [carbs, setCarbs] = useState(0);
+  const [protein, setProtein] = useState(0);
   const [showMealForm, setShowMealForm] = useState(true);
   const [allMeals, setAllMeals] = useState<CustomMeal[]>([]);
   const [mealCreated, setMealCreated] = useState(false);
-  const [mealDeleted, setMealDeleted] = useState(false);
   const [formData, setFormData] = useState({
     Userid: null,
     id: null,
@@ -27,6 +25,9 @@ const CreateMealForm = () => {
   });
 
   const [dataIsValid, setDataIsValid] = useState(false);
+  const [displayNotif, setDisplayNotif] = useState(false);
+  const [notifSuccess, setNotifSuccess] = useState(false);
+  const [notifText, setNotifText] = useState("");
 
   useEffect(() => {
     checkDataValidity();
@@ -47,61 +48,46 @@ const CreateMealForm = () => {
       postCustomMeal(formData)
         .then((data: any) => {
           setMealCreated(true);
-          setTimeout(() => {
-            setMealCreated(false);
-          }, 800);
-        })
-        .catch((err: any) => {});
-    } else {
-      alert("Please fill out all fields!");
-    }
-  };
-
-  const handleDeleteMeal = async (mealName: string) => {
-    if (window.confirm(`Are you sure you want to delete ${mealName}?`)) {
-      await deleteCustomMeal(mealName)
-        .then((data: any) => {
-          setAllMeals((prevMeals) =>
-            prevMeals.filter((meal) => meal.name !== mealName)
-          );
-          setMealCreated(false);
-          setMealDeleted(true);
-          setTimeout(() => {
-            setMealDeleted(false);
-          }, 800);
-          console.log("Meal deleted");
+          setNotifText(data.name);
+          setNotifSuccess(true);
+          setDisplayNotif(true);
         })
         .catch((err: any) => {
-          alert("Error deleting meal");
+          setNotifText(err);
+          setNotifSuccess(false);
+          setDisplayNotif(true);
         });
+    } else {
+      setNotifText("Please fill out all fields");
+      setNotifSuccess(false);
+      setDisplayNotif(true);
     }
   };
 
-  const filterMealByCalories = (allMeals: any) => {
-    const filteredMeals = allMeals.filter(
-      (meal: any) => meal.calories <= calories
-    );
+  const filterMealByCalories = (allMeals:any) => {
+    const filteredMeals = allMeals.filter((meal:any) => meal.calories <= calories);
     console.log(filteredMeals);
     return filteredMeals;
-  };
+
+  }
 
   const handleGetMeals = async () => {
     getCustomMeal()
       .then((data: any) => {
         setAllMeals(data);
         setShowMealForm(false);
-      }
-      )
+      })
       .catch((err: any) => {
-        alert("Error getting meals");
-        console.log(err);
+        setNotifText(err);
+        setNotifSuccess(false);
+        setDisplayNotif(true);
       });
   };
 
   return (
     <div>
       {showMealForm}
-      <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto" }}>
+      <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto"}}>
         {showMealForm && (
           <form
             style={{
@@ -195,6 +181,7 @@ const CreateMealForm = () => {
             borderRadius: "0.25rem",
           }}
         >
+
           {showMealForm && (
             <h1
               style={{
@@ -225,17 +212,14 @@ const CreateMealForm = () => {
           )}
           {mealCreated && showMealForm && (
             <div>
-              <h1
-                style={{
-                  color: "green",
-                  textAlign: "center",
-                  fontWeight: "600",
-                  marginTop: "2rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                Meal Created!
-              </h1>
+              <h1 style={{
+                color: "green",
+                textAlign: "center",
+                fontWeight: "600",
+                marginTop: "2rem",
+                marginBottom: "1rem",
+
+              }}>Meal Created!</h1>
             </div>
           )}
         </div>
@@ -275,19 +259,6 @@ const CreateMealForm = () => {
                   borderRadius: "0.25rem",
                 }}
               >
-                <button
-                  onClick={() => meal.name && handleDeleteMeal(meal.name)}
-                  style={{
-                    backgroundColor: "#2d3b4e",
-                    color: "white",
-                    padding: "1rem",
-                    borderRadius: "0.25rem",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                  }}
-                >
-                  Delete Meal
-                </button>
                 <table style={{ width: "100%" }}>
                   <tbody>
                     <tr>
@@ -335,19 +306,6 @@ const CreateMealForm = () => {
               </div>
             ))}
           </div>
-          {mealDeleted && (
-            <h1
-              style={{
-                color: "green",
-                textAlign: "center",
-                fontWeight: "600",
-                marginTop: "2rem",
-                marginBottom: "1rem",
-              }}
-            >
-              Meal Deleted!
-            </h1>
-          )}
         </div>
       )}
     </div>
