@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-
-import { postCustomMeal } from "../services/CustomMealService";
+import React, { useState, useEffect, lazy, Suspense } from "react";
+import {
+  deleteCustomMeal,
+  postCustomMeal,
+} from "../services/CustomMealService";
 import { getCustomMeal } from "../services/CustomMealService";
 import { CustomMeal } from "../models/CustomMeal";
 
@@ -11,168 +12,346 @@ const CreateMealForm = () => {
   const [fat, setFat] = useState("");
   const [carbs, setCarbs] = useState("");
   const [protein, setProtein] = useState("");
+  const [showMealForm, setShowMealForm] = useState(true);
   const [allMeals, setAllMeals] = useState<CustomMeal[]>([]);
+  const [mealCreated, setMealCreated] = useState(false);
+  const [mealDeleted, setMealDeleted] = useState(false);
+  const [formData, setFormData] = useState({
+    Userid: null,
+    id: null,
+    name: name,
+    calories: calories,
+    fat: fat,
+    carbs: carbs,
+    protein: protein,
+  });
 
-  const [dataIsValid, setDataIsValid] = React.useState(false);
-  const [displayNotif, setDisplayNotif] = React.useState(false);
-  const [notifSuccess, setNotifSuccess] = React.useState(false);
-  const [notifText, setNotifText] = React.useState("");
+  const [dataIsValid, setDataIsValid] = useState(false);
 
   useEffect(() => {
     checkDataValidity();
-  }, [name, calories, protein, carbs, fat]);
+  }, [formData]);
 
   const checkDataValidity = () => {
-    if (!name || !calories || !protein || !carbs || !fat) {
-      setDataIsValid(false);
+    const { name, calories, protein, carbs, fat } = formData;
+    setDataIsValid(!!name && !!calories && !!protein && !!carbs && !!fat);
+  };
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleCreateMeal = async (e: any) => {
+    e.preventDefault();
+    if (dataIsValid) {
+      postCustomMeal(formData)
+        .then((data: any) => {
+          setMealCreated(true);
+          setTimeout(() => {
+            setMealCreated(false);
+          }, 800);
+        })
+        .catch((err: any) => {});
     } else {
-      setDataIsValid(true);
+      alert("Please fill out all fields!");
     }
   };
 
-  const handleCreateMeal = async () => {
-    if (dataIsValid) {
-      postCustomMeal({
-        Userid: null,
-        id: null,
-        name: name,
-        calories: calories,
-        fat: fat,
-        carbs: carbs,
-        protein: protein,
-      })
+  const handleDeleteMeal = async (mealName: string) => {
+    if (window.confirm(`Are you sure you want to delete ${mealName}?`)) {
+      await deleteCustomMeal(mealName)
         .then((data: any) => {
-          setNotifText(data.name);
-          setNotifSuccess(true);
-          setDisplayNotif(true);
+          setAllMeals((prevMeals) =>
+            prevMeals.filter((meal) => meal.name !== mealName)
+          );
+          setMealCreated(false);
+          setMealDeleted(true);
+          setTimeout(() => {
+            setMealDeleted(false);
+          }, 800);
+          console.log("Meal deleted");
         })
         .catch((err: any) => {
-          setNotifText(err);
-          setNotifSuccess(false);
-          setDisplayNotif(true);
+          alert("Error deleting meal");
         });
-    } else {
-      setNotifText("Please fill out all fields");
-      setNotifSuccess(false);
-      setDisplayNotif(true);
     }
+  };
+
+  const filterMealByCalories = (allMeals: any) => {
+    const filteredMeals = allMeals.filter(
+      (meal: any) => meal.calories <= calories
+    );
+    console.log(filteredMeals);
+    return filteredMeals;
   };
 
   const handleGetMeals = async () => {
     getCustomMeal()
       .then((data: any) => {
         setAllMeals(data);
-      })
+        setShowMealForm(false);
+      }
+      )
       .catch((err: any) => {
-        setNotifText(err);
-        setNotifSuccess(false);
-        setDisplayNotif(true);
+        alert("Error getting meals");
+        console.log(err);
       });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Meal Name:</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Enter meal name"
-      />
-
-      <Text style={styles.label}>Calories:</Text>
-      <TextInput
-        style={styles.input}
-        value={calories}
-        onChangeText={setCalories}
-        placeholder="Enter calories"
-        keyboardType="numeric"
-      />
-      <Text style={styles.label}>Fats:</Text>
-      <TextInput
-        style={styles.input}
-        value={fat}
-        onChangeText={setFat}
-        placeholder="Enter fats"
-        keyboardType="numeric"
-      />
-
-      <Text style={styles.label}>Carbs:</Text>
-      <TextInput
-        style={styles.input}
-        value={carbs}
-        onChangeText={setCarbs}
-        placeholder="Enter carbs"
-        keyboardType="numeric"
-      />
-
-      <Text style={styles.label}>Protein:</Text>
-      <TextInput
-        style={styles.input}
-        value={protein}
-        onChangeText={setProtein}
-        placeholder="Enter protein"
-        keyboardType="numeric"
-      />
-
-      <Button title="Create Meal" onPress={handleCreateMeal} />
-
-      <Text style={styles.label}>Custom Meals:</Text>
-      <Button title="View Custom Meals" onPress={handleGetMeals} />
-      <div>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            padding: "30px",
-            alignItems: "center",
-          }}
-        >
-          {allMeals.map((meal, index) => (
-            <View
-              key={index}
+    <div>
+      {showMealForm}
+      <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto" }}>
+        {showMealForm && (
+          <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              border: "1px solid #ccc",
+              padding: "1rem",
+              borderRadius: "0.25rem",
+            }}
+          >
+            <h1
               style={{
-                backgroundColor: "#eee",
-                padding: "15px",
-                margin: "10px",
-                borderRadius: "8px",
+                fontSize: "1.5rem",
+                textAlign: "center",
+                fontWeight: "600",
+                marginTop: "2rem",
+                marginBottom: "1rem",
               }}
             >
-              <Text style={{ fontWeight: "bold" }}>Meal Name: {meal.name}</Text>
-              <Text style={{ fontWeight: "bold" }}>
-                Calories: {meal.calories}
-              </Text>
-              <Text style={{ fontWeight: "bold" }}>Fat: {meal.fat}</Text>
-              <Text style={{ fontWeight: "bold" }}>
-                Protein: {meal.protein}
-              </Text>
-              <Text style={{ fontWeight: "bold" }}>Carbs: {meal.carbs}</Text>
-            </View>
-          ))}
-        </View>
+              Create Meal Form
+            </h1>
+            <input
+              type="text"
+              placeholder="Enter meal name"
+              value={formData.name}
+              id="name"
+              onChange={handleChange}
+              style={{ padding: "0.5rem", border: "1px solid #ccc" }}
+            />
+            <input
+              type="text"
+              placeholder="Enter calories"
+              value={formData.calories}
+              id="calories"
+              onChange={handleChange}
+              style={{ padding: "0.5rem", border: "1px solid #ccc" }}
+            />
+
+            <input
+              type="text"
+              placeholder="Enter fat"
+              value={formData.fat}
+              id="fat"
+              onChange={handleChange}
+              style={{ padding: "0.5rem", border: "1px solid #ccc" }}
+            />
+
+            <input
+              type="text"
+              placeholder="Enter protein"
+              value={formData.protein}
+              id="protein"
+              onChange={handleChange}
+              style={{ padding: "0.5rem", border: "1px solid #ccc" }}
+            />
+
+            <input
+              type="text"
+              placeholder="Enter carbs"
+              value={formData.carbs}
+              id="carbs"
+              onChange={handleChange}
+              style={{ padding: "0.5rem", border: "1px solid #ccc" }}
+            />
+
+            <button
+              type="submit"
+              onClick={handleCreateMeal}
+              style={{
+                backgroundColor: "#2d3b4e",
+                color: "white",
+                padding: "1rem",
+                borderRadius: "0.25rem",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+            >
+              Create Meal
+            </button>
+          </form>
+        )}
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            border: "1px solid #ccc",
+            padding: "1rem",
+            borderRadius: "0.25rem",
+          }}
+        >
+          {showMealForm && (
+            <h1
+              style={{
+                fontSize: "1.5rem",
+                textAlign: "center",
+                fontWeight: "600",
+                marginTop: "2rem",
+                marginBottom: "1rem",
+              }}
+            >
+              View Custom Meals
+            </h1>
+          )}
+          {showMealForm && (
+            <button
+              onClick={handleGetMeals}
+              style={{
+                backgroundColor: "#2d3b4e",
+                color: "white",
+                padding: "1rem",
+                borderRadius: "0.25rem",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+            >
+              View Meals
+            </button>
+          )}
+          {mealCreated && showMealForm && (
+            <div>
+              <h1
+                style={{
+                  color: "green",
+                  textAlign: "center",
+                  fontWeight: "600",
+                  marginTop: "2rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                Meal Created!
+              </h1>
+            </div>
+          )}
+        </div>
       </div>
-    </View>
+
+      {!showMealForm && (
+        <div style={{ padding: "3rem", maxWidth: "32rem", margin: "auto" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              border: "1px solid #ccc",
+              padding: "1rem",
+              borderRadius: "0.25rem",
+            }}
+          >
+            <button
+              onClick={() => setShowMealForm(true)}
+              style={{
+                backgroundColor: "#2d3b4e",
+                color: "white",
+                padding: "1rem",
+                borderRadius: "0.25rem",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+            >
+              Create Meal
+            </button>
+            {allMeals.map((meal, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "rgb(179, 229, 255)",
+                  padding: "1rem",
+                  borderRadius: "0.25rem",
+                }}
+              >
+                <button
+                  onClick={() => meal.name && handleDeleteMeal(meal.name)}
+                  style={{
+                    backgroundColor: "#2d3b4e",
+                    color: "white",
+                    padding: "1rem",
+                    borderRadius: "0.25rem",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete Meal
+                </button>
+                <table style={{ width: "100%" }}>
+                  <tbody>
+                    <tr>
+                      <td style={{ fontSize: "1rem", fontWeight: "600" }}>
+                        Meal Name:
+                      </td>
+                      <td style={{ fontSize: "1rem", textAlign: "right" }}>
+                        {meal.name}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontSize: "1rem", fontWeight: "600" }}>
+                        Calories:
+                      </td>
+                      <td style={{ fontSize: "1rem", textAlign: "right" }}>
+                        {meal.calories}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontSize: "1rem", fontWeight: "600" }}>
+                        Fat:
+                      </td>
+                      <td style={{ fontSize: "1rem", textAlign: "right" }}>
+                        {meal.fat}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontSize: "1rem", fontWeight: "600" }}>
+                        Protein:
+                      </td>
+                      <td style={{ fontSize: "1rem", textAlign: "right" }}>
+                        {meal.protein}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontSize: "1rem", fontWeight: "600" }}>
+                        Carbs:
+                      </td>
+                      <td style={{ fontSize: "1rem", textAlign: "right" }}>
+                        {meal.carbs}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+          {mealDeleted && (
+            <h1
+              style={{
+                color: "green",
+                textAlign: "center",
+                fontWeight: "600",
+                marginTop: "2rem",
+                marginBottom: "1rem",
+              }}
+            >
+              Meal Deleted!
+            </h1>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: "#fff",
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 4,
-    color: "#333",
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 8,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-  },
-});
 
 export default CreateMealForm;
