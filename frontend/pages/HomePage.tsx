@@ -3,6 +3,7 @@ import { Button } from '@rneui/base';
 import SearchMeal from '../components/SearchMeal';
 import DisplayMeal from '../components/DisplayMeal';
 import { ProgressChart } from 'react-native-chart-kit';
+import { hexToRgba } from "../services/GeneralUtilityService";
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,7 +18,7 @@ const HomePage = ({ navigation }: { navigation: any }) => {
         backgroundColor: "#f2f2f2",
         backgroundGradientFrom: "#f2f2f2",
         backgroundGradientTo: "#f2f2f2",
-        color: (opacity = 1, index = 0) => data.colors[index],
+        color: (opacity = 1, index = 0) => hexToRgba(data.colors[index], opacity),
         labelColor: (opacity = 1, index = 0) => data.colors[index],
         useShadowColorFromDataset: false,
       };
