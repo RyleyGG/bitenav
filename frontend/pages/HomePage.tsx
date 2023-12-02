@@ -8,44 +8,56 @@ const { width, height } = Dimensions.get('window');
 
 const HomePage = ({ navigation }: { navigation: any }) => {
     const data = {
-        labels: ['Calories', 'Protein', 'Fat', 'Carbohydrates'], // optional
+        labels: ['Calories', 'Protein', 'Fat', 'Carbohydrates'],
+        colors: ['#ff6961', '#aec6cf', '#77dd77', '#cda4de'],
         data: [0.4, 0.6, 0.8, 0.1]
       };
 
       const chartConfig = {
-        backgroundColor: "#000000",
-        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        useShadowColorFromDataset: false, // optional
+        backgroundColor: "#f2f2f2",
+        color: (opacity = 1, index = 0) => data.colors[index],
+        labelColor: (opacity = 1, index = 0) => data.colors[index],
+        useShadowColorFromDataset: false,
       };
 
       return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
-          <Text style={{fontSize: 32, fontWeight: 'bold', marginVertical: 20, marginLeft: 20 }}>Welcome!</Text>
-          <View style={{ flex: 1, alignItems: 'center' }}>
+          <Text style={{ fontSize: 32, fontWeight: 'bold', marginVertical: 20, marginLeft: 20 }}>Welcome!</Text>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ 
-                borderRadius: 55,
-                overflow: 'hidden',
-                borderWidth: 1,
-                borderColor: '#000',
-                width: height > width ? width: 0.5 * width,
-                height: height > width ? 0.35 * height: 0.3 * height
+              borderRadius: 55,
+              overflow: 'hidden',
+              borderWidth: 1,
+              borderColor: '#f2f2f2',
+              backgroundColor: '#f2f2f2',
+              width: height > width ? width : 0.5 * width,
+              height: height > width ? 0.3 * height : 0.3 * height,
+              flex: 1,
+              flexDirection: 'row'
             }}>
               <ProgressChart
-                data={data}
-                width={height > width ? width: 0.5 * width}
-                height={height > width ? 0.35 * height: 0.3 * height}
-                strokeWidth={16}
-                radius={32}
-                chartConfig={chartConfig}
+                data={ data }
+                width={height > width ? width * 0.5 : 0.5 * width}
+                height={height > width ? height * 0.3 : 0.3 * height}
+                strokeWidth={12}
+                radius={24}
+                chartConfig={ chartConfig }
                 hideLegend={true}
               />
+              <View style={{ marginLeft: 20, marginTop: 50 }}>
+                {data.data.map((item, index) => (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }} key={index}>
+                    <View style={{ width: 10, height: 10, backgroundColor: data.colors[index], marginRight: 5 }} />
+                    <Text style={{ color: 'black' }}>{`${data.labels[index]}: ${item * 100}%`}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
           </View>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Button
-                title="Search meals"
-                onPress={() => navigation.navigate('Search')}
+              title="Search meals"
+              onPress={() => navigation.navigate('Search')}
             />
           </View>
         </View>
