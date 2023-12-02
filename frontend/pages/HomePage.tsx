@@ -34,14 +34,14 @@ const HomePage = ({ navigation }: { navigation: any }) => {
               borderColor: '#f2f2f2',
               backgroundColor: '#f2f2f2',
               width: height > width ? width : 0.8 * width,
-              height: height > width ? 0.3 * height : 0.3 * height,
+              height: 0.3 * height,
               flex: 1,
               flexDirection: 'row'
             }}>
               <ProgressChart
                 data={ data }
                 width={height > width ? width * 0.5 : 0.8 * width}
-                height={height > width ? height * 0.3 : 0.3 * height}
+                height={0.3 * height}
                 strokeWidth={12}
                 radius={24}
                 chartConfig={ chartConfig }
