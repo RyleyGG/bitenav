@@ -15,6 +15,8 @@ const HomePage = ({ navigation }: { navigation: any }) => {
 
       const chartConfig = {
         backgroundColor: "#f2f2f2",
+        backgroundGradientFrom: "#f2f2f2",
+        backgroundGradientTo: "#f2f2f2",
         color: (opacity = 1, index = 0) => data.colors[index],
         labelColor: (opacity = 1, index = 0) => data.colors[index],
         useShadowColorFromDataset: false,
@@ -30,14 +32,14 @@ const HomePage = ({ navigation }: { navigation: any }) => {
               borderWidth: 1,
               borderColor: '#f2f2f2',
               backgroundColor: '#f2f2f2',
-              width: height > width ? width : 0.5 * width,
+              width: height > width ? width : 0.8 * width,
               height: height > width ? 0.3 * height : 0.3 * height,
               flex: 1,
               flexDirection: 'row'
             }}>
               <ProgressChart
                 data={ data }
-                width={height > width ? width * 0.5 : 0.5 * width}
+                width={height > width ? width * 0.5 : 0.8 * width}
                 height={height > width ? height * 0.3 : 0.3 * height}
                 strokeWidth={12}
                 radius={24}
