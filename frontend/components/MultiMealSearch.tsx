@@ -22,7 +22,7 @@ const MultiMealSearch = (props:any) => {
   const [highProtein, setHighProtein] = useState(false);
   const [lowCarb, setLowCarb] = useState(false);
   const [lowFat, setLowFat] = useState(false);
-  const [offset, setOffset] = useState("0");
+  const [offset, setOffset] = useState(0);
 
   //output data
   //const [returnedMeals, setReturnedMeals] = useState<MealSearchResult[] |null>(null);
@@ -48,7 +48,11 @@ const MultiMealSearch = (props:any) => {
   // Everytime a name is entered the checkDataValidity function will run
   useEffect(() => {
     checkDataValidity();
-  }, [search, offset]);
+  }, [search]);
+
+  useEffect(() => {
+    updateData;
+  }, [setOffset]);
 
   // This function will check that the search field exist
   const checkDataValidity = () => {
@@ -74,7 +78,7 @@ const MultiMealSearch = (props:any) => {
       'lowFat': lowFat,
       'cuisine': '',
       'allergies': '',
-      "offset": offset
+      'offset': String(offset)
 
     })
     .then((data: any) => {
@@ -107,14 +111,20 @@ const MultiMealSearch = (props:any) => {
   const handleCloseNotif = () => {
     setDisplayNotif(false);
   }
-  const nextPage = () => {
-    setOffset(offset+1);
+  const pageChange = (change: string) => {
+    if(change === "increment") {
+      setOffset((prevState) => prevState + 1);
+    }
+    else if(change === "decrement") {
+      setOffset((prevState) => prevState - 1);
+    }
     updateData();
+    setDisplayNotif(false);
   }
 
 
-return (
-  <View style={{  display: 'flex', flexDirection: 'column' }}>
+  return (
+    <View style={{  display: 'flex', flexDirection: 'column' }}>
     <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
       <SearchBar 
         style={{backgroundColor: 'white'}}
@@ -126,14 +136,13 @@ return (
         placeholder="Search Here"
         onChangeText={updateSearch}
         value={search}
-      />
+        />
 
       <Button
         onPress={()=> updateData()}
         title={'Submit'} 
-      />
+        />
     </View>
-
 
     <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}> 
       <Dropdown 
@@ -146,7 +155,7 @@ return (
           setDiet(item.value)
           console.log(diet)
         }}
-      />
+        />
       
       <View style={{ width: "75%", display: 'flex', flexDirection: 'column' }}>
         <CheckBox
@@ -171,7 +180,7 @@ return (
               <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
             }
             onPress={()=>setLowCarb(!lowCarb)}
-          />
+            />
 
           <CheckBox
             title='Low Fat' 
@@ -183,19 +192,25 @@ return (
               <Ionicons name="radio-button-off" type="material" color="green" size={26}/>
             }
             onPress={()=>setLowFat(!lowFat)}
-          />
+            />
       </View>
       <Button
-        onPress={()=> nextPage()}
+        onPress={()=> pageChange('increment')}
         title={'Next Page'} 
-      />
+        />
+      <Button
+        onPress={()=> pageChange('decrement')}
+        title={'Prev Page'} 
+        />
+      <div>Page: {offset}</div>
+      
     </View>
 
 
 
     {displayNotif ? (
       notifSuccess ? (
-      <DisplayMeal 
+        <DisplayMeal 
         title={name}
         calories={calories}
         fat={fat}
