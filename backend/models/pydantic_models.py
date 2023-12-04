@@ -10,14 +10,13 @@ class User(BaseModel):
     password: str
 
 class CustomMeal(BaseModel):
-    id: uuid.UUID
-    user_id: uuid.UUID
+    Userid: Optional[uuid.UUID]
+    id: Optional[uuid.UUID]
     name: Optional[str]
     calories: Optional[str]
     fat: Optional[str]
     carbs: Optional[str]
     protein: Optional[str]
-    photolink: Optional[str]
     
 class Meal(BaseModel):
     Name: str

@@ -14,14 +14,13 @@ class User(Base):
 
 class CustomMeal(Base):
     __tablename__ = 'CustomMeal'
+    Userid = Column(UUID(as_uuid=True), ForeignKey('User.id'), index=True, default=uuid.uuid4)
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey('User.id'), default=uuid.uuid4)
     name = Column(String)
     calories = Column(String)
     fat = Column(String)
     carbs = Column(String)
     protein = Column(String)
-    photolink = Column(String)
 
 class MealIngredient(Base):
     __tablename__ = 'MealIngredient'

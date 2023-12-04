@@ -23,6 +23,7 @@ const HomePage = ({ navigation }: { navigation: any }) => {
         useShadowColorFromDataset: false,
       };
 
+
       return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
           <Text style={{ fontSize: 32, fontWeight: 'bold', marginVertical: 20, marginLeft: 20 }}>Welcome!</Text>
@@ -64,6 +65,18 @@ const HomePage = ({ navigation }: { navigation: any }) => {
             />
           </View>
         </View>
+        <Text>Search Page</Text>
+        <Button
+            title="Test Meal Search Function"
+            onPress={() => navigation.navigate('Search')}
+        />
+      <Text>Custom Meals</Text>
+      <Button
+        title="Test Custom Meals Function"
+        onPress={() => navigation.navigate("CustomMeals")}
+        />
+      </View>
+
     );
 }
 

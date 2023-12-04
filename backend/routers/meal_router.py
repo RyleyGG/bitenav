@@ -3,11 +3,13 @@ from db import getDb
 from sqlalchemy.orm import Session
 from services.config_service import config, logger
 
-from models.db_models import CustomMeal as CustomMealDb, User
+from models.db_models import CustomMeal as CustomMealDb, User as UserDb
 from models.pydantic_models import CustomMeal as CustomMealPyd
 from models.dto_models import MealSearchFilters, MealSearchResult
 import requests
 from typing import List
+from services import auth_service
+
 
 router = APIRouter()
 
@@ -98,15 +100,14 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
 
 
 @router.post('/custom', response_model=CustomMealPyd, response_model_by_alias=False)
-async def createCustomMeal(incomingCustomMeal: CustomMealPyd, db: Session = Depends(getDb)):
+async def createCustomMeal(incomingCustomMeal: CustomMealPyd, db: Session = Depends(getDb), user: UserDb = Depends(auth_service.validateToken)):
     newCustomMeal=CustomMealDb(
-        user_id=incomingCustomMeal.user_id,
+        Userid=user.id,
         name=incomingCustomMeal.name,
         calories=incomingCustomMeal.calories,
         fat=incomingCustomMeal.fat,
         carbs=incomingCustomMeal.carbs,
         protein=incomingCustomMeal.protein,
-        photolink=incomingCustomMeal.photolink
         )
     try:
         db.add(newCustomMeal)
@@ -120,6 +121,14 @@ async def createCustomMeal(incomingCustomMeal: CustomMealPyd, db: Session = Depe
         )
         
     return newCustomMeal
+
+@router.get('/custom', response_model=List[CustomMealPyd], response_model_by_alias=False)
+async def get_meal(db: Session = Depends(getDb), user: UserDb = Depends(auth_service.validateToken)):
+    meal = db.query(CustomMealDb).filter(CustomMealDb.Userid == user.id).all()
+    if meal is None:
+        return {"message": "Custom Meal not found"}
+    
+    return meal
     
 @router.get('/{meal_id}', response_model=CustomMealPyd, response_model_by_alias=False)
 async def get_meal(meal_id: int, db: Session = Depends(getDb)):
@@ -127,4 +136,13 @@ async def get_meal(meal_id: int, db: Session = Depends(getDb)):
     if meal is None:
         return {"message": "Meal not found"}
     
+    return meal
+
+@router.delete('/custom', response_model=CustomMealPyd, response_model_by_alias=False)
+async def delete_meal(db: Session = Depends(getDb), user: UserDb = Depends(auth_service.validateToken)):
+    meal = db.query(CustomMealDb).filter(CustomMealDb.Userid == user.id).first()
+    if meal is None:
+        return {"message": "Meal not found"}
+    db.delete(meal)
+    db.commit()
     return meal
