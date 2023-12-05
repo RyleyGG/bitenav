@@ -79,12 +79,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (existingAccessToken && existingRefreshToken) {
             await Promise.all([
                 AsyncStorage.setItem('access_token', accessToken),
-                AsyncStorage.setItem('refresh_token', refreshToken)
+                AsyncStorage.setItem('refresh_token', refreshToken),
             ]);
         }
         else {
-            SessionStorage.setItem('access_token', accessToken);
-            SessionStorage.setItem('refresh_token', refreshToken);
+            await Promise.all([
+                SessionStorage.setItem('access_token', accessToken),
+                SessionStorage.setItem('refresh_token', refreshToken),
+            ]);
         }
 
         return true;
@@ -96,8 +98,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             AsyncStorage.removeItem('refresh_token'),
         ]);
 
-        SessionStorage.removeItem('access_token'),
+        await Promise.all([
+            SessionStorage.removeItem('access_token'),
             SessionStorage.removeItem('refresh_token'),
+        ]);
 
             userIsAuthenticated();
     }
@@ -127,12 +131,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                     AsyncStorage.setItem('access_token', res.access_token),
                     AsyncStorage.setItem('refresh_token', res.refresh_token)
                 ]);
-                SessionStorage.removeItem('access_token'),
+                await Promise.all([
+                    SessionStorage.removeItem('access_token'),
                     SessionStorage.removeItem('refresh_token')
+                ]);
             }
             else {
-                SessionStorage.setItem('access_token', res.access_token);
-                SessionStorage.setItem('refresh_token', res.refresh_token);
+                await Promise.all([
+                    SessionStorage.setItem('access_token', res.access_token),
+                    SessionStorage.setItem('refresh_token', res.refresh_token),
+                ]);
                 await Promise.all([
                     AsyncStorage.removeItem('access_token'),
                     AsyncStorage.removeItem('refresh_token')
