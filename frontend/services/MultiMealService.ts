@@ -17,3 +17,17 @@ export const getMultiMeals = async (mealObj: MealSearchFilters) => {
         throw error;
     }
 }
+
+export const getMultiTest = async (mealObj: MealSearchFilters) => {
+    try {
+        const requestOptions = {
+            headers: { 'Content-Type': 'application/json' }
+        };
+        const response = await httpClient.post(`${url}/MultiSearchTest`, mealObj, requestOptions);
+
+        return response;
+    } catch (error) {
+        console.error("There was a problem fetching the data:", error);
+        throw error;
+    }
+}

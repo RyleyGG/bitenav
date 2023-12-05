@@ -1,11 +1,12 @@
 import { SearchBar, Input, CheckBox, Icon, Button} from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, StyleProp } from 'react-native';
+import { View, Text, StyleSheet, StyleProp, FlatList, SafeAreaView, Image } from 'react-native';
 import { sendSearch } from "../services/SearchMealService";
-import DisplayMeal from "./DisplayMeal";
+import DisplayMultiMeal from "./DisplayMultiMeal";
 import { getMeals } from "../services/TestSearchFunction";
 import { getMultiMeals } from "../services/MultiMealService";
+import { getMultiTest } from "../services/MultiMealService";
 import { MealSearchFilters, MealSearchResult } from "../models/MealSearch";
 import { ReturnedMeals } from "../models/MealSearch";
 import globalStyles from "../GlobalStyles";
@@ -25,13 +26,7 @@ const MultiMealSearch = (props:any) => {
   const [offset, setOffset] = useState(0);
 
   //output data
-  //const [returnedMeals, setReturnedMeals] = useState<MealSearchResult[] |null>(null);
-  const [name, setName] = useState("");
-  const [calories, setCalories] = useState("");
-  const [protein, setProtein] = useState("");
-  const [carbs, setCarbs] = useState("");
-  const [fat, setFat] = useState("");
-  const [photolink, setPhotolink] = useState("");
+  const [returnedMeals, setReturnedMeals] = useState([]);
 
   const [dataIsValid, setDataIsValid] = React.useState(false);
   const [displayNotif, setDisplayNotif] = React.useState(false);
@@ -82,14 +77,13 @@ const MultiMealSearch = (props:any) => {
 
     })
     .then((data: any) => {
-      //setReturnedMeals(data)
-
-      setName(data.name);
-      setCalories(data.calories);
-      setProtein(data.protein);
-      setCarbs(data.carbs);
-      setFat(data.fat);
-      setPhotolink(data.photolink)
+      setReturnedMeals(data)
+      // setName(data.name);
+      // setCalories(data.calories);
+      // setProtein(data.protein);
+      // setCarbs(data.carbs);
+      // setFat(data.fat);
+      // setPhotolink(data.photolink)
 
       setNotifText(data.name)
       setNotifSuccess(true);
@@ -108,6 +102,41 @@ const MultiMealSearch = (props:any) => {
     });
   }
 
+  const updateTestData = async () => {
+    getMultiTest({
+      'name': search,
+      'diet': diet,
+      'highProtein': highProtein,
+      'lowCarb': lowCarb,
+      'lowFat': lowFat,
+      'cuisine': '',
+      'allergies': '',
+      'offset': String(offset)
+    })
+    .then((data: any) => {
+      setReturnedMeals(data)
+      setNotifText('Pizza')
+      setNotifSuccess(true);
+      setDisplayNotif(true);
+      
+      setTimeout((
+        ) => {
+          //navigation.navigate('Search');
+        }
+        , 3000)
+    })
+    .catch((error: any) => {
+      setNotifText('There was an error processing the search. Please try again.')
+      setNotifSuccess(false);
+      setDisplayNotif(true);
+    });
+    
+  }
+
+  const showData = async () => {
+    console.log(returnedMeals);
+  }
+
   const handleCloseNotif = () => {
     setDisplayNotif(false);
   }
@@ -121,7 +150,6 @@ const MultiMealSearch = (props:any) => {
     updateData();
     setDisplayNotif(false);
   }
-
 
   return (
     <View style={{  display: 'flex', flexDirection: 'column' }}>
@@ -141,7 +169,15 @@ const MultiMealSearch = (props:any) => {
       <Button
         onPress={()=> updateData()}
         title={'Submit'} 
-        />
+      />
+      <Button
+        onPress={()=> updateTestData()}
+        title={'Test'} 
+      />
+      <Button
+        onPress={()=> showData()}
+        title={'Console Log Data'} 
+      />
     </View>
 
     <View style={{ display: 'flex',flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}> 
@@ -208,23 +244,33 @@ const MultiMealSearch = (props:any) => {
 
 
 
-    {displayNotif ? (
+     {displayNotif ? (
       notifSuccess ? (
-        <DisplayMeal 
-        title={name}
-        calories={calories}
-        fat={fat}
-        protein={protein}
-        carbs={carbs}
-        photolink={photolink}
-        />) 
+        <View style={styles.container}>
+          <SafeAreaView/>
+          {
+            <FlatList 
+              horizontal={false}
+              keyExtractor={(item)=>item.id}
+              data={returnedMeals}
+              renderItem={({item})=>(
+                <View>
+                  <Image source = {{uri:item.photolink}} style={{height: 200, width:200 }}/>
+                  <Text style={styles.item}>{item.name}</Text>
+                </View>
+              )}
+              ItemSeparatorComponent={()=><View style={styles.Separator}></View>}
+            />  
+          }
+        </View>
+        ) 
         : (<NotificationBox
-        content={notifText}
-        isVisible={displayNotif}
-        onClose={handleCloseNotif}
-        isSuccess={notifSuccess}
-      />)
-    ) : (<></>)}
+              content={notifText}
+              isVisible={displayNotif}
+              onClose={handleCloseNotif}
+              isSuccess={notifSuccess}
+          />)
+      ) : (<></>)}
 
   </View>
   
@@ -232,3 +278,27 @@ const MultiMealSearch = (props:any) => {
 };
 
 export default MultiMealSearch;
+
+
+const styles = StyleSheet.create({
+
+  container: {
+    backgroundColor: 'rgb(179, 229, 255)',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",  
+    flex: 1,
+    padding: 50,
+    borderColor: "black",
+    borderRadius: 2,
+  }, 
+  item: {
+      padding: 20,
+      fontSize: 15,
+      marginTop: 5,
+  },
+  Separator: {
+    height: 2,
+    backgroundColor: "black"
+  }
+});

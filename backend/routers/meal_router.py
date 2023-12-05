@@ -128,7 +128,7 @@ async def get_meal(meal_id: int, db: Session = Depends(getDb)):
     
     return meal
 
-@router.post('/MultiSearch', response_model=MealSearchResult, response_model_by_alias=False)
+@router.post('/MultiSearch', response_model=List[MealSearchResult], response_model_by_alias=False)
 async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(getDb)):
     #Variable Declaration
     searchFilters = ''
@@ -215,4 +215,18 @@ async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(
             detail='Error grabbing Nutrition results',
         )
         
-    return returnMeals[0]
+    return returnMeals
+
+@router.post('/MultiSearchTest', response_model=List[MealSearchResult], response_model_by_alias=False)
+async def MealSearch(incomingSearches: MealSearchFilters, db: Session = Depends(getDb)):
+    returnMeals = []
+    
+    returnMeals.append(MealSearchResult(name="Pizza bites with pumpkin", id = "656329", photolink="https://spoonacular.com/recipeImages/656329-312x231.jpg", calories="310.06", protein="15.57",carbs="13.58", fat=
+"22.48"))
+    returnMeals.append(MealSearchResult(name="BLT Pizza", id = '680975', photolink="https://spoonacular.com/recipeImages/680975-312x231.jpg", calories="776.64", protein="34.73",carbs="74.61", fat=
+"37.96"))
+    returnMeals.append(MealSearchResult(name="Thai Pizza", id = '"663136"', photolink="https://spoonacular.com/recipeImages/663136-312x231.jpg", calories="910.57", protein="44.84",carbs="105.96", fat=
+"35.44"))
+    
+        
+    return returnMeals
