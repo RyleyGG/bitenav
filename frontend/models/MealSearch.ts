@@ -18,3 +18,7 @@ export interface MealSearchResult {
     fat: string,
     photolink: string
 }
+
+export interface SingleMealSearch {
+    id: string
+}

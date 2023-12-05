@@ -1,7 +1,7 @@
 import { SearchBar, Input, CheckBox, Icon, Button, Dialog } from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import React, {useState, useEffect} from 'react';
-import { View, Text, Dimensions, StyleSheet, StyleProp, FlatList, SafeAreaView, Image } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, StyleProp, FlatList, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import DisplayMeal from "./DisplayMeal";
 import { getMeals, getMultiTest } from "../services/MealService";
 import globalStyles from "../GlobalStyles";
@@ -73,6 +73,7 @@ const SearchMeal = (props:any) => {
     if (inputSearch != '') {
       setShowLoader(true);
       const newTimeout = setTimeout(() => {
+        setOffset(0);
         updateData(inputSearch);
       }, 3000);
 
@@ -80,7 +81,8 @@ const SearchMeal = (props:any) => {
     }
   }
 
-    const updateData = async (inputSearch: any) => {
+    const updateData = async (inputSearch: any, offsetParam:number=0) => {
+      console.log(offsetParam)
       getMeals({
         'name': inputSearch,
         'diet': diet,
@@ -89,7 +91,7 @@ const SearchMeal = (props:any) => {
         'lowFat': lowFat,
         'cuisine': '',
         'allergies': '',
-        'offset': String(offset)
+        'offset': String(offsetParam)
 
       })
       .then((data: any) => {
@@ -127,6 +129,29 @@ const SearchMeal = (props:any) => {
           setShowLoader(true);
           updateData(search);
       }
+  }
+
+  const handlePageChange = (change: string) => {
+    let offsetLocal = offset
+
+    if(change === "increment" && offset <= 97) {
+      offsetLocal += 3
+      setOffset(offsetLocal);
+    }
+    else if(change === "decrement" && offset != 0) {
+      offsetLocal -= 3
+      setOffset(offsetLocal);
+    }
+
+    updateData(search, offsetLocal);
+  }
+
+  const pageChange = (change: string) => {
+
+  }
+
+  const pressHandler = (meal: any) =>{
+    console.log(meal.id);
   }
 
   return (
@@ -198,24 +223,42 @@ const SearchMeal = (props:any) => {
 
       {displayNotif ? (
         notifSuccess ? (
+          
           <View style={styles.container}>
-          <SafeAreaView/>
-          {
-            <FlatList 
-              horizontal={false}
-              keyExtractor={(item)=>item.id}
-              data={returnedMeals}
-              renderItem={({item})=>(
-                <View>
-                  <Image source = {{uri:item.photolink}} style={{height: 200, width:200 }}/>
-                  <Text style={styles.item}>{item.name}</Text>
-                </View>
-              )}
-              ItemSeparatorComponent={()=><View style={styles.Separator}></View>}
-            />  
-          }
-        </View>
-          ) 
+             <Button style={{marginBottom: 5}}
+              onPress={()=> handlePageChange('increment')}
+              title={'Next Page'} 
+              />
+            <Button
+              onPress={()=> handlePageChange('decrement')}
+              title={'Prev Page'} 
+         />
+            <SafeAreaView/>
+              {
+                <FlatList 
+                  showsVerticalScrollIndicator={false}
+                  horizontal={false}
+                  keyExtractor={(item)=>item.id}
+                  data={returnedMeals}
+                  renderItem={({item})=>(
+                    <View>
+                      <Text style={styles.title}>{item.name}</Text>
+                      <TouchableOpacity onPress={()=>pressHandler(item)}>
+                        <Image source = {{uri:item.photolink}} style={{height: 200, width:200 }}/>
+                      </TouchableOpacity>
+                      <View style={styles.meals}>
+                        <Text >Calories: {item.calories}</Text>
+                        <Text >Protein: {item.protein}g</Text>
+                        <Text >Carbs: {item.carbs}g</Text>
+                        <Text >Fat: {item.fat}g</Text>
+                      </View>
+                    </View>
+                  )}
+                  //ItemSeparatorComponent={()=><View style={styles.Separator}></View>}
+                />  
+              }
+          </View>
+        ) 
           : (<NotificationBox
           content={notifText}
           isVisible={displayNotif}
@@ -235,20 +278,43 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgb(179, 229, 255)',
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",  
     flex: 1,
-    padding: 50,
+    padding: 20,
     borderColor: "black",
     borderRadius: 2,
+    marginBottom: 1
   }, 
-  item: {
+  meals: {
+      display: "flex",
+      justifyContent: "flex-start",
+      alignItems: "flex-start", 
       padding: 20,
       fontSize: 15,
-      marginTop: 5,
+      marginTop: 1,
+      marginBottom: 10
   },
   Separator: {
     height: 2,
     backgroundColor: "black"
-  }
+  },
+  title: {
+    display: "flex", 
+    alignItems: "center",
+    fontWeight: "bold",
+    fontSize: 20,
+    marginBottom: 5
+  },
+  buttons: {
+    flex:1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 1,
+    fontSize: 15,
+    marginTop: 5,
+    marginBottom: 5,
+    gap: 5
+}
 });

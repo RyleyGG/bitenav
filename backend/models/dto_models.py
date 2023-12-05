@@ -40,3 +40,6 @@ class MealSearchResult(BaseModel):
     
 class RefreshToken(BaseModel):
     refresh_token: str
+    
+class SingleMealSearch(BaseModel):
+    id: str
