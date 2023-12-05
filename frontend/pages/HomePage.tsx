@@ -65,17 +65,6 @@ const HomePage = ({ navigation }: { navigation: any }) => {
             />
           </View>
         </View>
-        <Text>Search Page</Text>
-        <Button
-            title="Test Meal Search Function"
-            onPress={() => navigation.navigate('Search')}
-        />
-      <Text>Custom Meals</Text>
-      <Button
-        title="Test Custom Meals Function"
-        onPress={() => navigation.navigate("CustomMeals")}
-        />
-      </View>
 
     );
 }
