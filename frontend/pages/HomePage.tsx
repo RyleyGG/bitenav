@@ -1,4 +1,4 @@
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import { Button } from '@rneui/base';
 import SearchMeal from '../components/SearchMeal';
 import DisplayMeal from '../components/DisplayMeal';
@@ -58,10 +58,14 @@ const HomePage = ({ navigation }: { navigation: any }) => {
               </View>
             </View>
           </View>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={styles.buttons}>
             <Button
               title="Search meals"
               onPress={() => navigation.navigate('Search')}
+            />
+            <Button
+              title="Custom Meals"
+              onPress={() => navigation.navigate('CustomMeals')}
             />
           </View>
         </View>
@@ -70,3 +74,32 @@ const HomePage = ({ navigation }: { navigation: any }) => {
 }
 
 export default HomePage;
+
+const styles = StyleSheet.create({
+
+  container: {
+    backgroundColor: 'rgb(179, 229, 255)',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",  
+    flex: 1,
+    padding: 50,
+    borderColor: "black",
+    borderRadius: 2,
+  }, 
+  buttons: {
+      flex:1,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 1,
+      fontSize: 15,
+      marginTop: 5,
+      marginBottom: 5,
+      gap: 5
+  },
+  Separator: {
+    height: 2,
+    backgroundColor: "black"
+  }
+});

@@ -1,9 +1,9 @@
 import { SearchBar, Input, CheckBox, Icon, Button, Dialog } from "@rneui/themed";
 import { Dropdown } from "react-native-element-dropdown";
 import React, {useState, useEffect} from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, StyleProp, FlatList, SafeAreaView, Image } from 'react-native';
 import DisplayMeal from "./DisplayMeal";
-import { getMeals } from "../services/MealService";
+import { getMeals, getMultiTest } from "../services/MealService";
 import globalStyles from "../GlobalStyles";
 import NotificationBox from "./NotificationBox";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -17,14 +17,10 @@ const SearchMeal = (props:any) => {
   const [highProtein, setHighProtein] = useState(false);
   const [lowCarb, setLowCarb] = useState(false);
   const [lowFat, setLowFat] = useState(false);
+  const [offset, setOffset] = useState(0);
 
   //output data
-  const [name, setName] = useState("");
-  const [calories, setCalories] = useState("");
-  const [protein, setProtein] = useState("");
-  const [carbs, setCarbs] = useState("");
-  const [fat, setFat] = useState("");
-  const [photolink, setPhotolink] = useState("");
+  const [returnedMeals, setReturnedMeals] = useState([]);
 
   const [dataIsValid, setDataIsValid] = React.useState(false);
   const [displayNotif, setDisplayNotif] = React.useState(false);
@@ -92,16 +88,12 @@ const SearchMeal = (props:any) => {
         'lowCarb': lowCarb,
         'lowFat': lowFat,
         'cuisine': '',
-        'allergies': ''
+        'allergies': '',
+        'offset': String(offset)
 
       })
       .then((data: any) => {
-        setName(data.name);
-        setCalories(data.calories);
-        setProtein(data.protein);
-        setCarbs(data.carbs);
-        setFat(data.fat);
-        setPhotolink(data.photolink)
+        setReturnedMeals(data)
 
         setNotifText(data.name)
         setNotifSuccess(true);
@@ -206,14 +198,24 @@ const SearchMeal = (props:any) => {
 
       {displayNotif ? (
         notifSuccess ? (
-        <DisplayMeal 
-          title={name}
-          calories={calories}
-          fat={fat}
-          protein={protein}
-          carbs={carbs}
-          photolink={photolink}
-          />) 
+          <View style={styles.container}>
+          <SafeAreaView/>
+          {
+            <FlatList 
+              horizontal={false}
+              keyExtractor={(item)=>item.id}
+              data={returnedMeals}
+              renderItem={({item})=>(
+                <View>
+                  <Image source = {{uri:item.photolink}} style={{height: 200, width:200 }}/>
+                  <Text style={styles.item}>{item.name}</Text>
+                </View>
+              )}
+              ItemSeparatorComponent={()=><View style={styles.Separator}></View>}
+            />  
+          }
+        </View>
+          ) 
           : (<NotificationBox
           content={notifText}
           isVisible={displayNotif}
@@ -227,3 +229,26 @@ const SearchMeal = (props:any) => {
 };
 
 export default SearchMeal;
+
+const styles = StyleSheet.create({
+
+  container: {
+    backgroundColor: 'rgb(179, 229, 255)',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",  
+    flex: 1,
+    padding: 50,
+    borderColor: "black",
+    borderRadius: 2,
+  }, 
+  item: {
+      padding: 20,
+      fontSize: 15,
+      marginTop: 5,
+  },
+  Separator: {
+    height: 2,
+    backgroundColor: "black"
+  }
+});
