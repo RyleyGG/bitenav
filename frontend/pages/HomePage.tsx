@@ -60,7 +60,7 @@ const HomePage = ({ navigation }: { navigation: any }) => {
           </View>
           <View style={styles.buttons}>
             <Button
-              title="Search meals"
+              title="Search Meals"
               onPress={() => navigation.navigate('Search')}
             />
             <Button
